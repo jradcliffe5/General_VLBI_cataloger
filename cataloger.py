@@ -130,7 +130,7 @@ else:
             if auto_rms == True:
                 rms = float(np.sqrt(np.mean(data**2)))
                 print rms
-            os.system('python blobcat.py --dSNR=10 --rmsval=%f --edgemin=%d %s' % (rms,int(edge),file))
+            os.system('python blobcat.py --dSNR=6 --rmsval=%f --edgemin=%d %s' % (rms,int(edge),file))
             lines = open('%s_blobs.txt' % file[:-5]).readlines()
             try:
                 BMAJ = hduheader['BMAJ']/hduheader['CDELT2'] ## assuming cell is same size on both axes
