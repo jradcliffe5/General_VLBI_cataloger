@@ -159,7 +159,7 @@ else:
                 open('%s_r.blobs' % file, 'a').writelines(str(BMIN)+'\n')
                 open('%s_r.blobs' % file, 'a').writelines(str(BPA)+'\n')
                 open('%s_r.blobs' % file, 'a').writelines(lines[30:])
-            #os.system('rm %s_blobs.txt' % file[:-5])
+            os.system('rm %s_blobs.txt' % file[:-5])
     catalog_list = []
     for file in os.listdir('./'):
         if file.endswith('.blobs'):
