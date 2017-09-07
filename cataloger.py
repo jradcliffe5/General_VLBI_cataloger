@@ -24,6 +24,17 @@ edge = 10
 rms_box=250
 postfix = 'JVLA'
 useSAD = False ## If True SAD will be used otherwise blobcat is used (C. Hales+12)
+ds9 = True ## Writes out ds9 region file
+write_blobs = True ## Writes new blob images
+
+if write_blobs == True:
+    write_blobs = '--write'
+else:
+    write_blobs = ''
+if ds9 == True:
+    ds9 = '--ds9'
+else:
+    ds9 = ''
 
 def SAD_fit_remove(files,postfix):
     if os.path.isfile('catalogue_%s.csv' % postfix) == False:
@@ -68,11 +79,9 @@ def blobcat_fit_remove(files,postfix):
                     x = prefix +[x]
                     x = ' '.join(x).split()
                     x = ' '.join(x)
-                    print x
                     text_file.write(x.replace(' ',',')+'\n')
                 else:
                     prefix = prefix + [x]
-                    print prefix
 
 os.system('rm catalogue_%s.csv detections.txt' % postfix)
 
@@ -142,7 +151,8 @@ else:
             if auto_rms == True:
                 rms = float(np.sqrt(np.mean(data**2)))
                 print rms
-            os.system('python blobcat.py --dSNR=6 --rmsval=%f --edgemin=%d %s' % (rms,int(edge),file))
+            os.system('python blobcat.py --dSNR=6 --rmsval=%f --edgemin=%d %s %s %s' % (rms,int(edge),ds9,write_blobs,file))
+            print 'python blobcat.py --dSNR=6 --rmsval=%f --edgemin=%d %s %s %s' % (rms,int(edge),ds9,write_blobs,file)
             lines = open('%s_blobs.txt' % file[:-5]).readlines()
             try:
                 BMAJ = hduheader['BMAJ']/hduheader['CDELT2'] ## assuming cell is same size on both axes
