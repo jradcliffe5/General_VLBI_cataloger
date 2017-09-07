@@ -20,9 +20,9 @@ AIPS.userno = 1002
 i=1
 auto_rms = True
 rms = 4.73189515179e-05
-edge = 100
+edge = 10
 rms_box=250
-postfix = 'Taper'
+postfix = 'JVLA'
 useSAD = False ## If True SAD will be used otherwise blobcat is used (C. Hales+12)
 
 def SAD_fit_remove(files,postfix):
@@ -55,12 +55,24 @@ def blobcat_fit_remove(files,postfix):
         text_file.write(s)
     for j in files:
         with open(j) as f:
-            x = f.read().splitlines()
-        print x
-        x = ' '.join(x).split()
-        x = ' '.join(x)
-        print x
-        text_file.write(x.replace(' ',',')+'\n')
+            i = 0
+            prefix = []
+            for x in f:
+                i = i +1
+                if i>6:
+                    x = [',,,,']+[x]
+                    x = ' '.join(x).split()
+                    x = ' '.join(x)
+                    text_file.write(x.replace(' ',',')+'\n')
+                elif i == 6:
+                    x = prefix +[x]
+                    x = ' '.join(x).split()
+                    x = ' '.join(x)
+                    print x
+                    text_file.write(x.replace(' ',',')+'\n')
+                else:
+                    prefix = prefix + [x]
+                    print prefix
 
 os.system('rm catalogue_%s.csv detections.txt' % postfix)
 
@@ -68,7 +80,7 @@ detections = []
 
 if useSAD == True:
     for file in os.listdir('./'):
-        if file.endswith('IM_casa.fits'):
+        if file.endswith('_casa.fits'):
             fitld = AIPSTask('FITLD')
             hduheader = pyfits.open(file)[0].header
             print file
@@ -119,7 +131,7 @@ if useSAD == True:
     os.system('rm *fitout')
 else:
     for file in os.listdir('./'):
-        if file.endswith('IM_casa.fits'):
+        if file.endswith('_casa.fits'):
             fitld = AIPSTask('FITLD')
             hduheader = pyfits.open(file)[0].header
             print file
@@ -147,7 +159,7 @@ else:
                 open('%s_r.blobs' % file, 'a').writelines(str(BMIN)+'\n')
                 open('%s_r.blobs' % file, 'a').writelines(str(BPA)+'\n')
                 open('%s_r.blobs' % file, 'a').writelines(lines[30:])
-            os.system('rm %s_blobs.txt' % file[:-5])
+            #os.system('rm %s_blobs.txt' % file[:-5])
     catalog_list = []
     for file in os.listdir('./'):
         if file.endswith('.blobs'):
