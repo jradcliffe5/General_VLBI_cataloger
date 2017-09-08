@@ -23,6 +23,7 @@ rms = 4.73189515179e-05
 edge = 10
 rms_box=250
 postfix = 'JVLA'
+shorthand = False ## If true, catalog names will be appended to the first 8 characters
 useSAD = False ## If True SAD will be used otherwise blobcat is used (C. Hales+12)
 ds9 = True ## Writes out ds9 region file
 write_blobs = True ## Writes new blob images
@@ -116,6 +117,10 @@ if useSAD == True:
             sad.go()
             image.zap()
             lines = open('%s.fitout' % file).readlines()
+            if shorthand == True:
+                names = file[:8]
+            else:
+                names = file
             try:
                 BMAJ = hduheader['BMAJ']/hduheader['CDELT2'] ## assuming cell is same size on both axes
                 BMIN = hduheader['BMIN']/hduheader['CDELT2']
@@ -125,7 +130,7 @@ if useSAD == True:
                 sys.exit()
             if len(lines) > 24:
                 detections = detections + [file]
-                open('%s_r.fitout' % file, 'w').writelines(file[:8]+'\n')
+                open('%s_r.fitout' % file, 'w').writelines(names+'\n')
                 open('%s_r.fitout' % file, 'a').writelines(str(rms)+'\n')
                 open('%s_r.fitout' % file, 'a').writelines(str(BMAJ)+'\n')
                 open('%s_r.fitout' % file, 'a').writelines(str(BMIN)+'\n')
@@ -161,9 +166,13 @@ else:
             except KeyError:
                 print 'Run casa_convert.py first to get beam parameters into header'
                 sys.exit()
+            if shorthand == True:
+                names = file[:8]
+            else:
+                names = file
             if len(lines) > 30:
                 detections = detections + [file]
-                open('%s_r.blobs' % file, 'w').writelines(file[:8]+'\n')
+                open('%s_r.blobs' % file, 'w').writelines(names+'\n')
                 open('%s_r.blobs' % file, 'a').writelines(str(rms)+'\n')
                 open('%s_r.blobs' % file, 'a').writelines(str(BMAJ)+'\n')
                 open('%s_r.blobs' % file, 'a').writelines(str(BMIN)+'\n')
