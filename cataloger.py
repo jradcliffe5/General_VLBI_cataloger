@@ -15,7 +15,8 @@ import itertools
 from time import gmtime, strftime, localtime
 import pyfits
 import numpy as np
-### inputs ###
+
+###### Inputs #######
 AIPS.userno = 1002
 i=1
 auto_rms = True
@@ -27,6 +28,7 @@ shorthand = False ## If true, catalog names will be appended to the first 8 char
 useSAD = False ## If True SAD will be used otherwise blobcat is used (C. Hales+12)
 ds9 = True ## Writes out ds9 region file
 write_blobs = True ## Writes new blob images
+###################################
 
 if write_blobs == True:
     write_blobs = '--write'
