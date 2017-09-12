@@ -28,6 +28,8 @@ shorthand = False ## If true, catalog names will be appended to the first 8 char
 useSAD = False ## If True SAD will be used otherwise blobcat is used (C. Hales+12)
 ds9 = True ## Writes out ds9 region file
 write_blobs = True ## Writes new blob images
+run_BANE = True ## Runs BANE (aegean) to create a rms map
+use_BANE_rms = True ## Takes rms of each file (needs to be appended with _rms.fits, BANE does this auto.)
 ###################################
 
 if write_blobs == True:
@@ -148,7 +150,10 @@ if useSAD == True:
 else:
     for file in os.listdir('./'):
         if file.endswith('_casa.fits'):
-            fitld = AIPSTask('FITLD')
+            if run_BANE == True:
+                rms_map = file[:-5]+'_rms.fits'
+                os.system('rm %s %s_bkg.fits' % (rms_map,file[:-5]))
+                os.system('BANE %s' % file)
             hduheader = pyfits.open(file)[0].header
             print file
             try:
@@ -158,8 +163,11 @@ else:
             if auto_rms == True:
                 rms = float(np.sqrt(np.mean(data**2)))
                 print rms
-            os.system('python blobcat.py --dSNR=6 --rmsval=%f --edgemin=%d %s %s %s' % (rms,int(edge),ds9,write_blobs,file))
-            print 'python blobcat.py --dSNR=6 --rmsval=%f --edgemin=%d %s %s %s' % (rms,int(edge),ds9,write_blobs,file)
+            if use_BANE_rms == True:
+                os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=6 --fSNR=3 --rmsmap=%s --edgemin=%d %s %s %s' % (rms_map,int(edge),ds9,write_blobs,file))
+            else:
+                os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=6 --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (rms,int(edge),ds9,write_blobs,file))
+                print 'python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=6 --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (rms,int(edge),ds9,write_blobs,file)
             lines = open('%s_blobs.txt' % file[:-5]).readlines()
             try:
                 BMAJ = hduheader['BMAJ']/hduheader['CDELT2'] ## assuming cell is same size on both axes
