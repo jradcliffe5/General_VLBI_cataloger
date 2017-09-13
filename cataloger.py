@@ -23,7 +23,7 @@ auto_rms = True
 rms = 4.73189515179e-05
 edge = 10
 rms_box=250
-postfix = 'Taper'
+postfix = 'Uniform'
 shorthand = False ## If true, catalog names will be appended to the first 8 characters
 useSAD = False ## If True SAD will be used otherwise blobcat is used (C. Hales+12)
 ds9 = True ## Writes out ds9 region file
@@ -188,6 +188,8 @@ else:
                 open('%s_r.blobs' % file, 'a').writelines(str(BMIN)+'\n')
                 open('%s_r.blobs' % file, 'a').writelines(str(BPA)+'\n')
                 open('%s_r.blobs' % file, 'a').writelines(lines[30:])
+            elif ds9 == '--ds9':
+                os.system('rm %s_ds9.reg' % file[:-5])
             os.system('rm %s_blobs.txt' % file[:-5])
     catalog_list = []
     for file in os.listdir('./'):
