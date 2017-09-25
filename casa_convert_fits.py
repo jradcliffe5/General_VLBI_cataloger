@@ -1,7 +1,7 @@
 import os
 
 for file in os.listdir('./'):
-    if (os.path.isdir(file) == True) and ((file.endswith('.image')) or (file.endswith('.pbcor'))):
+    if (os.path.isdir(file) == True) and ((file.endswith('.image')) or (file.endswith('.pbcor')) or (file.endswith('.pbcor.image.tt0'))):
         exportfits(imagename=file,fitsimage=file[:-6]+'_casa.fits',\
         dropdeg=True,dropstokes=True)
     if file.endswith('.fits'):
