@@ -23,7 +23,7 @@ auto_rms = True
 rms = 4.73189515179e-05
 edge = 10
 rms_box=250
-postfix = 'Uniform'
+postfix = 'JVLA'
 shorthand = False ## If true, catalog names will be appended to the first 8 characters
 useSAD = False ## If True SAD will be used otherwise blobcat is used (C. Hales+12)
 ds9 = True ## Writes out ds9 region file
@@ -164,10 +164,10 @@ else:
                 rms = float(np.sqrt(np.mean(data**2)))
                 print rms
             if use_BANE_rms == True:
-                os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=6 --fSNR=3 --rmsmap=%s --edgemin=%d %s %s %s' % (rms_map,int(edge),ds9,write_blobs,file))
+                os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=5 --fSNR=3 --rmsmap=%s --edgemin=%d %s %s %s' % (rms_map,int(edge),ds9,write_blobs,file))
             else:
-                os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=6 --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (rms,int(edge),ds9,write_blobs,file))
-                print 'python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=6 --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (rms,int(edge),ds9,write_blobs,file)
+                os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=5 --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (rms,int(edge),ds9,write_blobs,file))
+                print 'python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=5 --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (rms,int(edge),ds9,write_blobs,file)
             lines = open('%s_blobs.txt' % file[:-5]).readlines()
             try:
                 BMAJ = hduheader['BMAJ']/hduheader['CDELT2'] ## assuming cell is same size on both axes
