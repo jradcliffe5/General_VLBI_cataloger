@@ -15,12 +15,15 @@ def ds9_plotter(file,reg_name,colormap,log_scaler):
         from astropy.visualization.wcsaxes import WCSAxes
 
         wcs = WCS(f_xray[0].header)
-        fig = plt.figure(figsize=(90, 90))
+        size = f_xray[0].header['NAXIS1']/41.
+        fig = plt.figure(figsize=(size, size))
         ax = WCSAxes(fig, [0.1, 0.1, 0.8, 0.8], wcs=wcs)
         fig.add_axes(ax)
     except ImportError:
         ax = plt.subplot(111)
 
+    print 'Plotting %s' % file
+    scale = 100
     image_data = f_xray[0].data*1E6
     rms = fits.open(file[:-5]+'_rms.fits')[0].data*1E6
     lon = ax.coords['ra']
@@ -32,8 +35,8 @@ def ds9_plotter(file,reg_name,colormap,log_scaler):
     rms = np.std(rms)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("top", size="5%", pad=0.00,axes_class=matplotlib.axes.Axes)
-    im = ax.imshow(image_data, origin='lower',cmap=colormap, vmin=rms/2., vmax=20*rms)
-    cb = plt.colorbar(orientation="horizontal",mappable=im, cax=cax, ticks=np.around(np.linspace(rms/2.,20*rms,4),decimals=-1),extend='max')
+    im = ax.imshow(image_data, origin='lower',cmap=colormap, vmin=rms/2., vmax=scale*rms)
+    cb = plt.colorbar(orientation="horizontal",mappable=im, cax=cax, ticks=np.around(np.linspace(rms/2.,scale*rms,4),decimals=-1),extend='max')
     cax.set_xlabel("Flux Density ($\mathrm{\mu Jy\/bm^{-1}}$)", labelpad=-60)
     cb.ax.xaxis.set_ticks_position('top')
     #cb = plt.colorbar(mappable=im, cax=cax,  ticks=np.linspace(0,1,2).astype(int))
@@ -62,6 +65,7 @@ def ds9_plotter(file,reg_name,colormap,log_scaler):
     f_xray.close()
     plt.close()
     del f_xray, image_data
+    print 'COMPLETE... next file'
 
 # read in the image
 for file in os.listdir('./'):

@@ -23,7 +23,8 @@ auto_rms = True
 rms = 4.73189515179e-05
 edge = 10
 rms_box=250
-postfix = 'JVLA'
+S_N_ratio = 6. ## Peak S/N ratio
+postfix = 'uniform_weight'
 shorthand = False ## If true, catalog names will be appended to the first 8 characters
 useSAD = False ## If True SAD will be used otherwise blobcat is used (C. Hales+12)
 ds9 = True ## Writes out ds9 region file
@@ -111,12 +112,12 @@ if useSAD == True:
             fitld.go()
             image = AIPSImage(str(i),'IM',1,1)
             sad = AIPSTask('SAD')
-            sad.cparm[1:] = 8*rms, 6*rms, 5*rms
+            sad.cparm[1:] = (S_N_ratio+2)*rms, S_N_ratio*rms, (S_N_ratio-1.)*rms
             sad.indata = image
             sad.in2data = image
             sad.blc[1:] = edge,edge
             sad.trc[1:] = int(hduheader['NAXIS1'])-edge,int(hduheader['NAXIS2'])-edge
-            sad.dparm[1] = 6*rms
+            sad.dparm[1] = S_N_ratio*rms
             sad.fitout = 'PWD:%s.fitout' % file
             sad.go()
             image.zap()
@@ -164,10 +165,10 @@ else:
                 rms = float(np.sqrt(np.mean(data**2)))
                 print rms
             if use_BANE_rms == True:
-                os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=5 --fSNR=3 --rmsmap=%s --edgemin=%d %s %s %s' % (rms_map,int(edge),ds9,write_blobs,file))
+                os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=%.2f --fSNR=3 --rmsmap=%s --edgemin=%d %s %s %s' % (S_N_ratio,rms_map,int(edge),ds9,write_blobs,file))
             else:
-                os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=5 --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (rms,int(edge),ds9,write_blobs,file))
-                print 'python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=5 --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (rms,int(edge),ds9,write_blobs,file)
+                os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR==%.2f --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (S_N_ratio,rms,int(edge),ds9,write_blobs,file))
+                print 'python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR==%.2f --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (S_N_ratio,rms,int(edge),ds9,write_blobs,file)
             lines = open('%s_blobs.txt' % file[:-5]).readlines()
             try:
                 BMAJ = hduheader['BMAJ']/hduheader['CDELT2'] ## assuming cell is same size on both axes
