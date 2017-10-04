@@ -16,6 +16,51 @@ from time import gmtime, strftime, localtime
 import pyfits
 import numpy as np
 
+def headless(inputfile):
+    ''' Parse the list of inputs given in the specified file. (Modified from evn_funcs.py)'''
+    INPUTFILE = open(inputfile, "r")
+    control = {}
+    # a few useful regular expressions
+    newline = re.compile(r'\n')
+    space = re.compile(r'\s')
+    char = re.compile(r'\w')
+    comment = re.compile(r'#.*')
+    # parse the input file assuming '=' is used to separate names from values
+    for line in INPUTFILE:
+        if char.match(line):
+            line = comment.sub(r'', line)
+            line = line.replace("'", '')
+            (param, value) = line.split('=')
+            param = newline.sub(r'', param)
+            param = param.strip()
+            param = space.sub(r'', param)
+            value = newline.sub(r'', value)
+            value = value.replace(' ','').strip()
+            valuelist = value.split(',')
+            if len(valuelist) == 1:
+                if valuelist[0] == '0' or valuelist[0]=='1' or valuelist[0]=='2':
+                    control[param] = int(valuelist[0])
+                else:
+                    control[param] = str(valuelist[0])
+            else:
+                control[param] = ','.join(valuelist)
+    return control
+
+inputs = headless('catalog_inputs.txt')
+AIPS.userno = int(inputs['AIPS_user'])
+auto_rms = inputs['auto_rms']
+rms = float(inputs['rms'])
+edge = int(inputs['edge'])
+rms_box = int(inputs['rms_box'])
+S_N_ratio = float(inputs['S_N_ratio'])
+postfix = str(inputs['postfix'])
+shorthand = inputs['shorthand']
+useSAD = inputs['useSAD']
+ds9 = inputs['ds9']
+write_blobs = inputs['write_blobs']
+run_BANE = inputs['run_BANE']
+use_BANE_rms = inputs['use_BANE_rms']
+'''
 ###### Inputs #######
 AIPS.userno = 1002
 i=1
@@ -32,12 +77,14 @@ write_blobs = True ## Writes new blob images
 run_BANE = True ## Runs BANE (aegean) to create a rms map
 use_BANE_rms = True ## Takes rms of each file (needs to be appended with _rms.fits, BANE does this auto.)
 ###################################
+'''
+i=1
 
-if write_blobs == True:
+if write_blobs == 'True':
     write_blobs = '--write'
 else:
     write_blobs = ''
-if ds9 == True:
+if ds9 == 'True':
     ds9 = '--ds9'
 else:
     ds9 = ''
@@ -93,7 +140,7 @@ os.system('rm catalogue_%s.csv detections.txt' % postfix)
 
 detections = []
 
-if useSAD == True:
+if useSAD == 'True':
     for file in os.listdir('./'):
         if file.endswith('_casa.fits'):
             fitld = AIPSTask('FITLD')
@@ -103,7 +150,7 @@ if useSAD == True:
                 data = np.array(pyfits.open(file)[0].data[0,0,edge:edge+rms_box,edge:edge+rms_box])
             except IndexError:
                 data = np.array(pyfits.open(file)[0].data[edge:edge+rms_box,edge:edge+rms_box])
-            if auto_rms == True:
+            if auto_rms == 'True':
                 rms = float(np.sqrt(np.mean(data**2)))
                 print rms
             fitld.datain = 'PWD:%s' % file
@@ -122,7 +169,7 @@ if useSAD == True:
             sad.go()
             image.zap()
             lines = open('%s.fitout' % file).readlines()
-            if shorthand == True:
+            if shorthand == 'True':
                 names = file[:8]
             else:
                 names = file
@@ -151,7 +198,7 @@ if useSAD == True:
 else:
     for file in os.listdir('./'):
         if file.endswith('_casa.fits'):
-            if run_BANE == True:
+            if run_BANE == 'True':
                 rms_map = file[:-5]+'_rms.fits'
                 os.system('rm %s %s_bkg.fits' % (rms_map,file[:-5]))
                 os.system('BANE %s' % file)
@@ -161,14 +208,14 @@ else:
                 data = np.array(pyfits.open(file)[0].data[0,0,edge:edge+rms_box,edge:edge+rms_box])
             except IndexError:
                 data = np.array(pyfits.open(file)[0].data[edge:edge+rms_box,edge:edge+rms_box])
-            if auto_rms == True:
+            if auto_rms == 'True':
                 rms = float(np.sqrt(np.mean(data**2)))
                 print rms
-            if use_BANE_rms == True:
+            if use_BANE_rms == 'True':
                 os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=%.2f --fSNR=3 --rmsmap=%s --edgemin=%d %s %s %s' % (S_N_ratio,rms_map,int(edge),ds9,write_blobs,file))
             else:
                 os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR==%.2f --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (S_N_ratio,rms,int(edge),ds9,write_blobs,file))
-                print 'python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR==%.2f --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (S_N_ratio,rms,int(edge),ds9,write_blobs,file)
+                print 'python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=%.2f --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (S_N_ratio,rms,int(edge),ds9,write_blobs,file)
             lines = open('%s_blobs.txt' % file[:-5]).readlines()
             try:
                 BMAJ = hduheader['BMAJ']/hduheader['CDELT2'] ## assuming cell is same size on both axes
@@ -177,7 +224,7 @@ else:
             except KeyError:
                 print 'Run casa_convert.py first to get beam parameters into header'
                 sys.exit()
-            if shorthand == True:
+            if shorthand == 'True':
                 names = file[:8]
             else:
                 names = file

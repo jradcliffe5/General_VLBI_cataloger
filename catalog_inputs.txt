@@ -1,0 +1,14 @@
+# Inputs
+AIPS_user = 1002
+auto_rms = True
+rms = 4.73189515179e-05
+edge = 10
+rms_box=250
+S_N_ratio = 6 ## Peak S/N ratio
+postfix = 'natural_weight'
+shorthand = False ## If true, catalog names will be appended to the first 8 characters
+useSAD = False ## If True SAD will be used otherwise blobcat is used (C. Hales+12)
+ds9 = True ## Writes out ds9 region file
+write_blobs = True ## Writes new blob images
+run_BANE = True ## Runs BANE (aegean) to create a rms map
+use_BANE_rms = True ## Takes rms of each file (needs to be appended with _rms.fits, BANE does this auto.)
