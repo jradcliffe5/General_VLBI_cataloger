@@ -214,7 +214,7 @@ else:
             if use_BANE_rms == 'True':
                 os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=%.2f --fSNR=3 --rmsmap=%s --edgemin=%d %s %s %s' % (S_N_ratio,rms_map,int(edge),ds9,write_blobs,file))
             else:
-                os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR==%.2f --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (S_N_ratio,rms,int(edge),ds9,write_blobs,file))
+                os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=%.2f --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (S_N_ratio,rms,int(edge),ds9,write_blobs,file))
                 print 'python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=%.2f --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (S_N_ratio,rms,int(edge),ds9,write_blobs,file)
             lines = open('%s_blobs.txt' % file[:-5]).readlines()
             try:
