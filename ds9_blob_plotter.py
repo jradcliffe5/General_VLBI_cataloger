@@ -7,7 +7,7 @@ import matplotlib
 import numpy as np
 import os
 
-def ds9_plotter(file,reg_name,colormap,log_scaler):
+def ds9_plotter(file,reg_name,colormap,log_scaler,pybdsm):
     plt.clf()
     f_xray = fits.open(file)
     try:
@@ -24,8 +24,11 @@ def ds9_plotter(file,reg_name,colormap,log_scaler):
 
     print 'Plotting %s' % file
     scale = 100
-    image_data = f_xray[0].data*1E6
-    rms = fits.open(file[:-5]+'_rms.fits')[0].data*1E6
+    image_data =f_xray[0].data*1E6
+    if pybdsm == 'True':
+        rms = np.ndarray.squeeze(fits.open(file.split('.')[0][:-5]+'.fits_gaus.residual_casa.fits')[0].data)*1E6
+    else:
+        rms = fits.open(file[:-5]+'_rms.fits')[0].data*1E6
     lon = ax.coords['ra']
     lat = ax.coords['dec']
     lon.set_major_formatter('hh:mm:ss')
@@ -72,4 +75,8 @@ for file in os.listdir('./'):
     if file.endswith('ds9.reg'):
         fitsfile = file[:-8]+'.fits'
         reg_name = file
-        ds9_plotter(fitsfile,reg_name,colormap='magma',log_scaler=250)
+        ds9_plotter(fitsfile,reg_name,colormap='magma',log_scaler=250,pybdsm='False')
+    elif file.endswith('.pybdsm.srl.reg'):
+        fitsfile = file.split('.')[0]+'_casa.fits'
+        reg_name = file
+        ds9_plotter(fitsfile,reg_name,colormap='magma',log_scaler=250,pybdsm='True')

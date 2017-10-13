@@ -34,6 +34,7 @@ inputs = headless('catalog_inputs.txt')
 detection_threshold = float(inputs['S_N_ratio'])
 postfix = str(inputs['postfix'])
 shorthand = inputs['shorthand']
+ds9 = inputs['ds9']
 
 def write_catalog_pybdsf(input_image,detection_threshold,shorthand):
         if shorthand == 'True':
@@ -44,6 +45,8 @@ def write_catalog_pybdsf(input_image,detection_threshold,shorthand):
         thresh='hard')
         # Write the source list catalog. File is named automatically.
         img.write_catalog(format='csv', catalog_type='srl',clobber=True)
+        if ds9 == 'True':
+            img.write_catalog(format='ds9', catalog_type='srl',clobber=True)
         # Write the residual image. File is name automatically.
         img.export_image(outfile=name+'_gaus.residual.fits',img_type='gaus_resid',clobber=True)
         # Write the model image. File name is specified.
