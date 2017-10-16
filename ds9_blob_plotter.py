@@ -23,7 +23,7 @@ def ds9_plotter(file,reg_name,colormap,log_scaler,pybdsm):
         ax = plt.subplot(111)
 
     print 'Plotting %s' % file
-    scale = 100
+    scale = 10
     image_data =f_xray[0].data*1E6
     if pybdsm == 'True':
         rms = np.ndarray.squeeze(fits.open(file.split('.')[0][:-5]+'.fits_gaus.residual_casa.fits')[0].data)*1E6
