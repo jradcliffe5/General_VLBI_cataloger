@@ -57,7 +57,7 @@ def write_catalog_pybdsf(input_image,detection_threshold,shorthand):
 def combine_pybdsf(shorthand,postfix):
     os.system('rm catalogue_pybdsf_%s.csv' % postfix)
     if os.path.isfile('catalogue_pybdsf_%s.csv' % postfix) == False:
-        s = 'Name, Source_id, Isl_id, RA, E_RA, DEC, E_DEC, Total_flux, E_Total_flux, Peak_flux, E_Peak_flux, RA_max, E_RA_max, DEC_max, E_DEC_max, Maj, E_Maj, Min, E_Min, PA, E_PA, Maj_img_plane, E_Maj_img_plane, Min_img_plane, E_Min_img_plane, PA_img_plane, E_PA_img_plane, DC_Maj, E_DC_Maj, DC_Min, E_DC_Min, DC_PA, E_DC_PA, DC_Maj_img_plane, E_DC_Maj_img_plane, DC_Min_img_plane, E_DC_Min_img_plane, DC_PA_img_plane, E_DC_PA_img_plane, Isl_Total_flux, E_Isl_Total_flux, Isl_rms, Isl_mean, Resid_Isl_rms, Resid_Isl_mean, S_Code\n'.format(postfix)
+        s = 'Name_{0}, Source_id_{0}, Isl_id_{0}, RA_{0}, E_RA_{0}, DEC_{0}, E_DEC_{0}, Total_flux_{0}, E_Total_flux_{0}, Peak_flux_{0}, E_Peak_flux_{0}, RA_max_{0}, E_RA_max_{0}, DEC_max_{0}, E_DEC_max_{0}, Maj_{0}, E_Maj_{0}, Min_{0}, E_Min_{0}, PA_{0}, E_PA_{0}, Maj_img_plane_{0}, E_Maj_img_plane_{0}, Min_img_plane_{0}, E_Min_img_plane_{0}, PA_img_plane_{0}, E_PA_img_plane_{0}, DC_Maj_{0}, E_DC_Maj_{0}, DC_Min_{0}, E_DC_Min_{0}, DC_PA_{0}, E_DC_PA_{0}, DC_Maj_img_plane_{0}, E_DC_Maj_img_plane_{0}, DC_Min_img_plane_{0}, E_DC_Min_img_plane_{0}, DC_PA_img_plane_{0}, E_DC_PA_img_plane_{0}, Isl_Total_flux_{0}, E_Isl_Total_flux_{0}, Isl_rms_{0}, Isl_mean_{0}, Resid_Isl_rms_{0}, Resid_Isl_mean_{0}, S_Code_{0}\n'.format(postfix)
         os.system('touch catalogue_pybdsf_%s.csv' % postfix)
         text_file = open('catalogue_pybdsf_%s.csv' % postfix,'a')
         text_file.write(s)
