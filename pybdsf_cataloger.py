@@ -65,12 +65,13 @@ def combine_pybdsf(shorthand,postfix):
         if file.endswith('.srl'):
             lines = open('%s' % file).readlines()
             if shorthand == 'True':
-                names = file[:8]
+                names = file[:8]+','
             else:
-                names = file
+                names = file+','
             if len(lines) > 6:
                 #detections = detections + [file]
-                text_file.write(names+','+''.join(lines[6:]))
+                #print names+names.join(lines[6:])
+                text_file.write(names+names.join(lines[6:]))
             os.system('rm %s' % file)
 
 for i in os.listdir('./'):
