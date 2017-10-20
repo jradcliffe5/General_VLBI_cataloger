@@ -1,14 +1,28 @@
 # Inputs
+## General Inputs
+auto_rms = True            ## Determines the rms automatically
+rms_box= 250               ## Size of rms box if auto_rms is True (from TLC currently)
+rms = 4.4e-05              ## Constant rms value if auto_rms is False
+S_N_ratio = 6.             ## Peak S/N ratio
+edge = 10                  ## Edge number of pixels not to consider for cataloging
+shorthand = False          ## If true, catalog names will be appended to the first 8 characters
+useSAD = False             ## If True SAD will be used, otherwise blobcat is used (C. Hales+12)
+postfix = 'natural_weight' ## Append this to the catalog name and column rows
+
+## Inputs for SAD
 AIPS_user = 1002
-auto_rms = True
-rms = 4.73189515179e-05
-edge = 10
-rms_box=250
-S_N_ratio = 6 ## Peak S/N ratio
-postfix = 'natural_weight'
-shorthand = False ## If true, catalog names will be appended to the first 8 characters
-useSAD = False ## If True SAD will be used otherwise blobcat is used (C. Hales+12)
-ds9 = True ## Writes out ds9 region file
-write_blobs = True ## Writes new blob images
-run_BANE = True ## Runs BANE (aegean) to create a rms map
-use_BANE_rms = True ## Takes rms of each file (needs to be appended with _rms.fits, BANE does this auto.)
+
+## Inputs for blobcat
+### Cataloguing options
+SNR_flood = 3.             ## SNR ratio to flood down to 2.5-3 x rms is usually ok
+pmep = 1.                  ## Max estimate pixellation error
+ppe = 0.2                  ## Percentage peak SB pixellation error
+cpeRA = 0.005              ## Error in phase cal RA (arcsec)
+cpeDec = 0.005             ## Error in phase cal Dec (arcsec)
+pasbe = 0.2                ## Surface Brightness error from calibration in per cent
+run_BANE = True            ## Runs BANE (aegean) to create a rms map before cataloging
+use_BANE_rms = True        ## Takes rms of each file (needs to be appended with _rms.fits)
+
+### Output options
+ds9 = True                 ## Writes out ds9 region file
+write_blobs = True         ## Writes new blob images

@@ -60,23 +60,41 @@ ds9 = inputs['ds9']
 write_blobs = inputs['write_blobs']
 run_BANE = inputs['run_BANE']
 use_BANE_rms = inputs['use_BANE_rms']
+SNR_flood = float(inputs['SNR_flood'])
+pmep = float(inputs['pmep'])                  ## Max estimate pixellation error
+ppe = float(inputs['ppe'])
+cpeRA = float(inputs['cpeRA'])                ## Error in phase cal RA (arcsec)
+cpeDec = float(inputs['cpeDec'])             ## Error in phase cal Dec (arcsec)
+pasbe = float(inputs['pasbe'])                ## Surface Brightness error from calibration in per cent
 '''
-###### Inputs #######
-AIPS.userno = 1002
-i=1
-auto_rms = True
-rms = 4.73189515179e-05
-edge = 10
-rms_box=250
-S_N_ratio = 6. ## Peak S/N ratio
-postfix = 'natural_weight'
-shorthand = False ## If true, catalog names will be appended to the first 8 characters
-useSAD = False ## If True SAD will be used otherwise blobcat is used (C. Hales+12)
-ds9 = True ## Writes out ds9 region file
-write_blobs = True ## Writes new blob images
-run_BANE = True ## Runs BANE (aegean) to create a rms map
-use_BANE_rms = True ## Takes rms of each file (needs to be appended with _rms.fits, BANE does this auto.)
-###################################
+# Inputs
+## General Inputs
+auto_rms = True            ## Determines the rms automatically
+rms_box= 250               ## Size of rms box if auto_rms is True (from TLC currently)
+rms = 4.4e-05              ## Constant rms value if auto_rms is False
+S_N_ratio = 6.             ## Peak S/N ratio
+edge = 10                  ## Edge number of pixels not to consider for cataloging
+shorthand = False          ## If true, catalog names will be appended to the first 8 characters
+useSAD = False             ## If True SAD will be used, otherwise blobcat is used (C. Hales+12)
+postfix = 'natural_weight' ## Append this to the catalog name and column rows
+
+## Inputs for SAD
+AIPS_user = 1002
+
+## Inputs for blobcat
+### Cataloguing options
+SNR_flood = 3.              ## SNR ratio to flood down to 2.5-3 x rms is usually ok
+pmep = 1.                  ## Max estimate pixellation error
+cpeRA = 0.005              ## Error in phase cal RA (arcsec)
+cpeDec = 0.005             ## Error in phase cal Dec (arcsec)
+pasbe = 0.2                ## Surface Brightness error from calibration in per cent
+run_BANE = True            ## Runs BANE (aegean) to create a rms map before cataloging
+use_BANE_rms = True        ## Takes rms of each file (needs to be appended with _rms.fits)
+
+### Output options
+ds9 = True                 ## Writes out ds9 region file
+write_blobs = True         ## Writes new blob images
+
 '''
 i=1
 
@@ -141,6 +159,7 @@ os.system('rm catalogue_%s.csv detections.txt' % postfix)
 detections = []
 
 if useSAD == 'True':
+    print 'RUNNING AIPS TASK SAD'
     for file in os.listdir('./'):
         if file.endswith('_casa.fits'):
             fitld = AIPSTask('FITLD')
@@ -196,14 +215,16 @@ if useSAD == 'True':
     SAD_fit_remove(catalog_list,postfix)
     os.system('rm *fitout')
 else:
+    print 'RUNNING BLOBCAT with parameters'
+    print '--dSNR=%.2f --fSNR=%.2f --pmep=%.4f --ppe=%.4f --pasbe=%.4f --cpeRA=%.6f --cpeDec=%.6f --edgemin=%d %s %s' % (S_N_ratio,SNR_flood,pmep,ppe,pasbe,cpeRA,cpeDec,int(edge),ds9,write_blobs)
     for file in os.listdir('./'):
         if file.endswith('_casa.fits'):
+            print 'Cataloguing %s' % file
             if run_BANE == 'True':
                 rms_map = file[:-5]+'_rms.fits'
                 os.system('rm %s %s_bkg.fits' % (rms_map,file[:-5]))
                 os.system('BANE %s' % file)
             hduheader = pyfits.open(file)[0].header
-            print file
             try:
                 data = np.array(pyfits.open(file)[0].data[0,0,edge:edge+rms_box,edge:edge+rms_box])
             except IndexError:
@@ -212,10 +233,9 @@ else:
                 rms = float(np.sqrt(np.mean(data**2)))
                 print rms
             if use_BANE_rms == 'True':
-                os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=%.2f --fSNR=3 --rmsmap=%s --edgemin=%d %s %s %s' % (S_N_ratio,rms_map,int(edge),ds9,write_blobs,file))
+                os.system('python blobcat.py --dSNR=%.2f --fSNR=%.2f --pmep=%.4f --ppe=%.4f --pasbe=%.4f --cpeRA=%.6f --cpeDec=%.6f --rmsmap=%s --edgemin=%d %s %s %s' % (S_N_ratio,SNR_flood,pmep,ppe,pasbe,cpeRA,cpeDec,rms_map,int(edge),ds9,write_blobs,file))
             else:
-                os.system('python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=%.2f --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (S_N_ratio,rms,int(edge),ds9,write_blobs,file))
-                print 'python blobcat.py --ppe=0.01 --pasbe=0.2 --dSNR=%.2f --fSNR=3 --rmsval=%f --edgemin=%d %s %s %s' % (S_N_ratio,rms,int(edge),ds9,write_blobs,file)
+                os.system('python blobcat.py --dSNR=%.2f --fSNR=%.2f --pmep=%.4f --ppe=%.4f --pasbe=%.4f --cpeRA=%.6f --cpeDec=%.6f --rmsval=%f --edgemin=%d %s %s %s' % (S_N_ratio,SNR_flood,pmep,ppe,pasbe,cpeRA,cpeDec,rms,int(edge),ds9,write_blobs,file))
             lines = open('%s_blobs.txt' % file[:-5]).readlines()
             try:
                 BMAJ = hduheader['BMAJ']/hduheader['CDELT2'] ## assuming cell is same size on both axes
@@ -239,6 +259,7 @@ else:
             elif ds9 == '--ds9':
                 os.system('rm %s_ds9.reg' % file[:-5])
             os.system('rm %s_blobs.txt' % file[:-5])
+    print 'COMPLETE...'
     catalog_list = []
     for file in os.listdir('./'):
         if file.endswith('.blobs'):
