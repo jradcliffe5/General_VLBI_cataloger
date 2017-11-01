@@ -13,15 +13,62 @@ import matplotlib.gridspec as gridspec
 from wcsaxes import WCSAxes
 from astropy import wcs
 import csv
+import matplotlib
+#matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.odr import Model, Data, ODR
+from scipy.stats import linregress
+import numpy as np
+import matplotlib.cm as cm
+from scipy import constants
 import pandas as pd
-df = pd.read_csv('/Users/jackradcliffe/PhD/GOODSN_Catalogues/eg078_EVN_catalogues/VLBI_Catalogue_v10.csv')
-print df.columns
+from matplotlib import rc
+from matplotlib import rcParams
+
+rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+## for Palatino and other serif fonts use:
+#rc('font',**{'family':'serif','serif':['Palatino']})
+rc('text', usetex=True)
+rcParams['mathtext.default'] = 'regular'
+matplotlib.rcParams.update({'font.size': 22})
+plt.ioff()
+
+fig_size = plt.rcParams["figure.figsize"]
+# Prints: [8.0, 6.0]
+print "Current size:", fig_size
+
+# Set figure width to 9 and height to 9
+fig_size[1] = 9
+fig_size[0] = 9
+plt.rcParams["figure.figsize"] = fig_size
+
+beaminfo = []
+
+matplotlib.rcParams['contour.negative_linestyle'] = 'dashed'
+### Inputs ###
+subimsize = 1000
+units = 'uJy'
+nlevs = 5
+##############
+
+if units == 'uJy':
+    flux_scaler = 1E6
+elif units == 'mJy':
+    flux_scaler = 1E3
+elif units == 'Jy':
+    flux_scaler = 1
+else:
+    print 'No unit specified [Jy/mJy/uJy], assuming Jy'
+    flux_scaler = 1
+
+df = pd.read_csv('/Users/jackradcliffe/PhD/GOODSN_Catalogues/eg078_EVN_catalogues/eg078b/VLBI_Catalogue_fix_v13.csv')
+
 beaminfo = []
 matplotlib.rcParams['contour.negative_linestyle'] = 'dashed'
 for file in os.listdir('./'):
-    if file[:8].lower() in df.Catalog_names.tolist():
-        name =  df.NAME_VLA_1[df.Catalog_names == file[:8].lower()].tolist()[0]
-        print name
+    if file[:8].upper() in df.Catalog_name.tolist():
+        name =  df.NAME_VLA_1[df.Catalog_name == file[:8].upper()].tolist()[0]
     if file.endswith('casa.fits'):
         pixsiz = 40
         edge = 5
@@ -31,9 +78,12 @@ for file in os.listdir('./'):
         if file.endswith('PBCOR_NA_IM_large_casa.fits'):
             pixsiz = 60
             edge = 10
+        print 'Plotting for Chi plot %s' % file
         hdu_list = fits.open(file)
         mywcs = wcs.WCS(hdu_list[0].header)
-        image_data = hdu_list[0].data*1E6
+        naxis = hdu_list[0].header['NAXIS1']
+        image_data = hdu_list[0].data[int((naxis-subimsize)/2.):int((naxis+subimsize)/2.),\
+        int((naxis-subimsize)/2.):int((naxis+subimsize)/2.)]*flux_scaler
         fig = plt.figure(6)
         ax = WCSAxes(fig, [0.1, 0.1, 0.8, 0.8], wcs=mywcs)
         lon = ax.coords['ra']
@@ -51,14 +101,13 @@ for file in os.listdir('./'):
         fig.add_axes(ax)
         if np.max(image_data) > 11:
             levs = [-1*np.std(image_data),np.std(image_data)]
-            levs = np.append(levs,np.around(np.linspace(np.std(image_data),np.max(image_data),7),decimals=0)[1:-1])
+            levs = np.append(levs,np.around(np.linspace(np.std(image_data),np.max(image_data),nlevs),decimals=0)[1:-1])
         else:
             levs = [-1*np.std(image_data),np.std(image_data)]
-            levs = np.append(levs,np.around(np.linspace(np.std(image_data),np.max(image_data),7),decimals=0)[1:-1])
-        print levs
+            levs = np.append(levs,np.around(np.linspace(np.std(image_data),np.max(image_data),nlevs),decimals=0)[1:-1])
         cont = ax.contour(image_data, levels=levs, cmap='gray_r', alpha=0.5)
         im = ax.imshow(image_data, origin='lower',cmap="magma",interpolation="bicubic")
-        text = ax.text(0.5, 0.9,'J'+str(name),color='w', horizontalalignment='center', verticalalignment='center',transform = ax.transAxes,size=30)
+        text = ax.text(0.5, 0.9,r'\textbf{J%s}' % str(name),color='w', horizontalalignment='center', verticalalignment='center',transform = ax.transAxes,size=60)
         #divider = make_axes_locatable(ax)
         #cax = divider.append_axes("top", size="5%", pad=0.00,
         #                          axes_class=matplotlib.axes.Axes)
@@ -91,7 +140,7 @@ for file in os.listdir('./'):
         bmaj = hdu_list[0].header['BMAJ']/hdu_list[0].header['CDELT2']
         bmin = hdu_list[0].header['BMIN']/hdu_list[0].header['CDELT2']
         bpa = hdu_list[0].header['BPA']
-        beam_text = ax.text(0.98, 0.05,r'%.1f$\times$%.1f mas' % (bmaj,bmin),color='w', horizontalalignment='right', verticalalignment='center',transform = ax.transAxes,size=24)
+        beam_text = ax.text(0.98, 0.05,r'\textbf{%.1f$\times$%.1f mas}' % (bmaj,bmin),color='w', horizontalalignment='right', verticalalignment='center',transform = ax.transAxes,size=38)
         if file.endswith('NA_PBCOR_IM_casa.fits'):
             with open('beamsizes_taper.csv', 'a') as myfile:
                 beaminfo = [file, hdu_list[0].header['BMAJ']*1000*3600, hdu_list[0].header['BMIN']*1000*3600, bpa]
