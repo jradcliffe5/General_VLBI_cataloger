@@ -55,11 +55,11 @@ def write_catalog_pybdsf(input_image,detection_threshold,shorthand):
 #write_catalog_pybdsf('HDFA0002_MSSC_FG_NA_IM.fits',detection_threshold)
 
 def combine_pybdsf(shorthand,postfix):
-    os.system('rm catalogue_pybdsf_%s.csv' % postfix)
+    os.system('rm catalogue_PYBDSF_%s.csv' % postfix)
     if os.path.isfile('catalogue_pybdsf_%s.csv' % postfix) == False:
         s = 'Name_{0}, Source_id_{0}, Isl_id_{0}, RA_{0}, E_RA_{0}, DEC_{0}, E_DEC_{0}, Total_flux_{0}, E_Total_flux_{0}, Peak_flux_{0}, E_Peak_flux_{0}, RA_max_{0}, E_RA_max_{0}, DEC_max_{0}, E_DEC_max_{0}, Maj_{0}, E_Maj_{0}, Min_{0}, E_Min_{0}, PA_{0}, E_PA_{0}, Maj_img_plane_{0}, E_Maj_img_plane_{0}, Min_img_plane_{0}, E_Min_img_plane_{0}, PA_img_plane_{0}, E_PA_img_plane_{0}, DC_Maj_{0}, E_DC_Maj_{0}, DC_Min_{0}, E_DC_Min_{0}, DC_PA_{0}, E_DC_PA_{0}, DC_Maj_img_plane_{0}, E_DC_Maj_img_plane_{0}, DC_Min_img_plane_{0}, E_DC_Min_img_plane_{0}, DC_PA_img_plane_{0}, E_DC_PA_img_plane_{0}, Isl_Total_flux_{0}, E_Isl_Total_flux_{0}, Isl_rms_{0}, Isl_mean_{0}, Resid_Isl_rms_{0}, Resid_Isl_mean_{0}, S_Code_{0}\n'.format(postfix)
-        os.system('touch catalogue_pybdsf_%s.csv' % postfix)
-        text_file = open('catalogue_pybdsf_%s.csv' % postfix,'a')
+        os.system('touch catalogue_PYBDSF_%s.csv' % postfix)
+        text_file = open('catalogue_PYBDSF_%s.csv' % postfix,'a')
         text_file.write(s)
     for file in os.listdir('./'):
         if file.endswith('.srl'):
