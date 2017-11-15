@@ -138,6 +138,7 @@ def blobcat_fit_remove(files,postfix):
     for j in files:
         with open(j) as f:
             i = 0
+            text_file = open('catalogue_BLOBCAT_%s.csv' % postfix,'a')
             prefix = []
             for x in f:
                 i = i +1
