@@ -194,8 +194,8 @@ if useSAD == 'True':
             else:
                 names = file
             try:
-                BMAJ = hduheader['BMAJ']/hduheader['CDELT2'] ## assuming cell is same size on both axes
-                BMIN = hduheader['BMIN']/hduheader['CDELT2']
+                BMAJ = hduheader['BMAJ']
+                BMIN = hduheader['BMIN']
                 BPA = hduheader['BPA']
             except KeyError:
                 print 'Run casa_convert.py first to get beam parameters into header'
