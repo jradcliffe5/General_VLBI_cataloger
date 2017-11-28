@@ -240,8 +240,8 @@ else:
                 os.system('python blobcat.py --dSNR=%.2f --fSNR=%.2f --pmep=%.4f --ppe=%.4f --pasbe=%.4f --cpeRA=%.6f --cpeDec=%.6f --rmsval=%f --edgemin=%d %s %s %s' % (S_N_ratio,SNR_flood,pmep,ppe,pasbe,cpeRA,cpeDec,rms,int(edge),ds9,write_blobs,file))
             lines = open('%s_blobs.txt' % file[:-5]).readlines()
             try:
-                BMAJ = hduheader['BMAJ']/hduheader['CDELT2'] ## assuming cell is same size on both axes
-                BMIN = hduheader['BMIN']/hduheader['CDELT2']
+                BMAJ = hduheader['BMAJ'] ## assuming cell is same size on both axes
+                BMIN = hduheader['BMIN']
                 BPA = hduheader['BPA']
             except KeyError:
                 print 'Run casa_convert.py first to get beam parameters into header'
