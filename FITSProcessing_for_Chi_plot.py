@@ -140,7 +140,7 @@ for file in os.listdir('./'):
         bmaj = hdu_list[0].header['BMAJ']/hdu_list[0].header['CDELT2']
         bmin = hdu_list[0].header['BMIN']/hdu_list[0].header['CDELT2']
         bpa = hdu_list[0].header['BPA']
-        beam_text = ax.text(0.98, 0.05,r'\textbf{%.1f$\times$%.1f mas}' % (bmaj,bmin),color='w', horizontalalignment='right', verticalalignment='center',transform = ax.transAxes,size=38)
+        beam_text = ax.text(0.98, 0.05,r'\textbf{%.1f$\times$%.1f mas}' % (hdu_list[0].header['BMAJ']*1000*3600,hdu_list[0].header['BMIN']*1000*3600),color='w', horizontalalignment='right', verticalalignment='center',transform = ax.transAxes,size=38)
         if file.endswith('NA_PBCOR_IM_casa.fits'):
             with open('beamsizes_taper.csv', 'a') as myfile:
                 beaminfo = [file, hdu_list[0].header['BMAJ']*1000*3600, hdu_list[0].header['BMIN']*1000*3600, bpa]

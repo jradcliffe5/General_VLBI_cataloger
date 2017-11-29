@@ -143,6 +143,7 @@ for file in os.listdir('./'):
 
         ### Pull beam information from fits file
         from matplotlib.patches import Ellipse
+        ### Put bmaj, bmin in terms of pixel size!
         bmaj = hdu_list[0].header['BMAJ']/hdu_list[0].header['CDELT2']
         bmin = hdu_list[0].header['BMIN']/hdu_list[0].header['CDELT2']
         bpa = hdu_list[0].header['BPA']
