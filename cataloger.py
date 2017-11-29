@@ -160,6 +160,7 @@ os.system('rm catalogue_%s.csv detections.txt' % postfix)
 detections = []
 
 if useSAD == 'True':
+    os.system('rm catalogue_SAD_%s.csv' % postfix)
     print 'RUNNING AIPS TASK SAD'
     for file in os.listdir('./'):
         if file.endswith('_casa.fits'):
@@ -216,6 +217,7 @@ if useSAD == 'True':
     SAD_fit_remove(catalog_list,postfix)
     os.system('rm *fitout')
 else:
+    os.system('rm catalogue_BLOBCAT_%s.csv' % postfix)
     print 'RUNNING BLOBCAT with parameters'
     print '--dSNR=%.2f --fSNR=%.2f --pmep=%.4f --ppe=%.4f --pasbe=%.4f --cpeRA=%.6f --cpeDec=%.6f --edgemin=%d %s %s' % (S_N_ratio,SNR_flood,pmep,ppe,pasbe,cpeRA,cpeDec,int(edge),ds9,write_blobs)
     for file in os.listdir('./'):
