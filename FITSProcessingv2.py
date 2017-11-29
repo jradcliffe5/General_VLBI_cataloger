@@ -67,7 +67,7 @@ else:
 
 for file in os.listdir('./'):
     if file.endswith('casa.fits'):
-        ## VLBI specifics
+        ## VLBI EG078B specifics
         '''
         pixsiz = 40
         edge = 5

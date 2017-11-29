@@ -1,30 +1,20 @@
-import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-from astropy.io import fits
 from matplotlib.colors import LogNorm
-import aplpy
+import matplotlib.patches as mpatches
+import matplotlib.gridspec as gridspec
+import matplotlib.cm as cm
+from matplotlib import rc
+from matplotlib import rcParams
+from astropy import wcs
+from astropy.io import fits
 import os.path
 from scipy.optimize import curve_fit
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import sys
-import matplotlib.patches as mpatches
-import matplotlib.gridspec as gridspec
-from wcsaxes import WCSAxes
-from astropy import wcs
 import csv
-import matplotlib
-#matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 import numpy as np
-from scipy.odr import Model, Data, ODR
-from scipy.stats import linregress
-import numpy as np
-import matplotlib.cm as cm
-from scipy import constants
 import pandas as pd
-from matplotlib import rc
-from matplotlib import rcParams
 
 rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 ## for Palatino and other serif fonts use:
@@ -47,7 +37,7 @@ beaminfo = []
 
 matplotlib.rcParams['contour.negative_linestyle'] = 'dashed'
 ### Inputs ###
-subimsize = 1000
+subimsize = 4000
 units = 'uJy'
 nlevs = 5
 ##############
@@ -70,13 +60,13 @@ for file in os.listdir('./'):
     if file[:8].upper() in df.Catalog_name.tolist():
         name =  df.NAME_VLA_1[df.Catalog_name == file[:8].upper()].tolist()[0]
     if file.endswith('casa.fits'):
-        pixsiz = 40
+        pixsiz = 400
         edge = 5
         if file.endswith('PBCOR_NA_IM_casa.fits'):
-            pixsiz = 60
+            pixsiz = 600
             edge = 10
         if file.endswith('PBCOR_NA_IM_large_casa.fits'):
-            pixsiz = 60
+            pixsiz = 600
             edge = 10
         print 'Plotting for Chi plot %s' % file
         hdu_list = fits.open(file)
@@ -85,7 +75,8 @@ for file in os.listdir('./'):
         image_data = hdu_list[0].data[int((naxis-subimsize)/2.):int((naxis+subimsize)/2.),\
         int((naxis-subimsize)/2.):int((naxis+subimsize)/2.)]*flux_scaler
         fig = plt.figure(6)
-        ax = WCSAxes(fig, [0.1, 0.1, 0.8, 0.8], wcs=mywcs)
+        ### Initialise figure and wcs axes
+        ax = plt.subplot(projection=mywcs)
         lon = ax.coords['ra']
         lat = ax.coords['dec']
         lon.set_ticks_visible(False)
