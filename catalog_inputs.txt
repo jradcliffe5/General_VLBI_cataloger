@@ -16,7 +16,7 @@ AIPS_user = 1002
 ### Cataloguing options
 SNR_flood = 3.             ## SNR ratio to flood down to 2.5-3 x rms is usually ok
 pmep = 1.                  ## Max estimate pixellation error
-ppe = 0.2                  ## Percentage peak SB pixellation error
+ppe = 0.01                  ## Percentage peak SB pixellation error
 cpeRA = 0.005              ## Error in phase cal RA (arcsec)
 cpeDec = 0.005             ## Error in phase cal Dec (arcsec)
 pasbe = 0.2                ## Surface Brightness error from calibration in per cent
