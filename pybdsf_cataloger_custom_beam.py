@@ -43,10 +43,10 @@ def write_catalog_pybdsf(input_image,detection_threshold,shorthand,csvfile):
             name = input_image.split('_PBCOR_IM.fits')[0]
         else:
             name = input_image
-        print name
-        bmaj = csvfile['BMAJ_uniform_weight'][csvfile['Catalog_name'].isin([name])].values[0]
-        bmin = csvfile['BMIN_uniform_weight'][csvfile['Catalog_name'].isin([name])].values[0]
-        bpa = csvfile['BPA_uniform_weight'][csvfile['Catalog_name'].isin([name])].values[0]
+        name2 = input_image.split('_PBCOR_IM.fits')[0]
+        bmaj = csvfile['BMAJ_uniform_weight'][csvfile['Catalog_name'].isin([name2])].values[0]
+        bmin = csvfile['BMIN_uniform_weight'][csvfile['Catalog_name'].isin([name2])].values[0]
+        bpa = csvfile['BPA_uniform_weight'][csvfile['Catalog_name'].isin([name2])].values[0]
 
         img = bdsf.process_image(input_image, mean_map='default',\
         adaptive_rms_box=True,thresh_pix=detection_threshold,\
