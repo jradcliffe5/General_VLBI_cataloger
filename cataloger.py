@@ -2,13 +2,18 @@ import os, re, time, datetime, sys, math, fnmatch
 from os.path import join, getsize
 from datetime import date
 from collections import deque
-import Utilities
+#import Utilities
 #from multiprocessing import Process	# No longer needed now SERPent is parallel
 #from multiprocessing import Pool
-from AIPS import AIPS, AIPSDisk
-from AIPSTask import AIPSTask, AIPSList
-from AIPSData import AIPSUVData, AIPSImage, AIPSCat
-from Wizardry.AIPSData import AIPSUVData as WizAIPSUVData
+try:
+    from AIPS import AIPS, AIPSDisk
+    from AIPSTask import AIPSTask, AIPSList
+    from AIPSData import AIPSUVData, AIPSImage, AIPSCat
+    from Wizardry.AIPSData import AIPSUVData as WizAIPSUVData
+except ImportError:
+    print 'No AIPS/Parseltongue available, using BLOBCAT instead'
+
+
 import math, time, datetime
 from numpy import *
 import itertools
@@ -47,7 +52,7 @@ def headless(inputfile):
     return control
 
 inputs = headless('catalog_inputs.txt')
-AIPS.userno = int(inputs['AIPS_user'])
+
 auto_rms = inputs['auto_rms']
 rms = float(inputs['rms'])
 edge = int(inputs['edge'])
@@ -66,6 +71,16 @@ ppe = float(inputs['ppe'])
 cpeRA = float(inputs['cpeRA'])                ## Error in phase cal RA (arcsec)
 cpeDec = float(inputs['cpeDec'])             ## Error in phase cal Dec (arcsec)
 pasbe = float(inputs['pasbe'])                ## Surface Brightness error from calibration in per cent
+try:
+    from AIPS import AIPS, AIPSDisk
+    from AIPSTask import AIPSTask, AIPSList
+    from AIPSData import AIPSUVData, AIPSImage, AIPSCat
+    from Wizardry.AIPSData import AIPSUVData as WizAIPSUVData
+    AIPS.userno = int(inputs['AIPS_user'])
+except ImportError:
+    print 'No AIPS/Parseltongue available, using BLOBCAT instead'
+    useSAD = 'False'
+
 '''
 # Inputs
 ## General Inputs
