@@ -115,7 +115,7 @@ else:
 
 def SAD_fit_remove(files,postfix):
     if os.path.isfile('catalogue_SAD_%s.csv' % postfix) == False:
-        s = 'Catalog_name rms_{0} BMAJ_{0} BMIN_{0} BPA_{0} #_{0}      Peak_{0}    Dpeak_{0}     Flux_{0}    Dflux_{0}    RA---SIN_{0}   DEC--SIN_{0}  Dx_{0}      Dy_{0}       Maj_{0}     Min_{0}      PA_{0}    Dmaj_{0}    Dmin_{0}    Dpa_{0} #_{0}  MAJ-fit_{0} MIN-fit_{0} PA-fit_{0}    MAJ-dec_{0} MIN-dec_{0}  PA-dec_{0}  R_{0} MAJ-low_{0} MIN-low_{0}  PA-low_{0}    MAJ-hi_{0}  MIN-hi_{0}  PA-hi_{0}    Xpix_{0}   Ypix_{0}   MAXresid_{0}\n'.format(postfix)
+        s = 'Catalog_name_{0} rms_{0} BMAJ_{0} BMIN_{0} BPA_{0} #_{0}      Peak_{0}    Dpeak_{0}     Flux_{0}    Dflux_{0}    RA---SIN_{0}   DEC--SIN_{0}  Dx_{0}      Dy_{0}       Maj_{0}     Min_{0}      PA_{0}    Dmaj_{0}    Dmin_{0}    Dpa_{0} #_{0}  MAJ-fit_{0} MIN-fit_{0} PA-fit_{0}    MAJ-dec_{0} MIN-dec_{0}  PA-dec_{0}  R_{0} MAJ-low_{0} MIN-low_{0}  PA-low_{0}    MAJ-hi_{0}  MIN-hi_{0}  PA-hi_{0}    Xpix_{0}   Ypix_{0}   MAXresid_{0}\n'.format(postfix)
         s = ' '.join(s.split())+'\n'
         s = s.replace(' ',',')
         os.system('touch catalogue_SAD_%s.csv' % postfix)
@@ -135,7 +135,7 @@ def SAD_fit_remove(files,postfix):
 
 def blobcat_fit_remove(files,postfix):
     if os.path.isfile('catalogue_BLOBCAT_%s.csv' % postfix) == False:
-        s = 'Catalog_name rms_{0} BMAJ_{0} BMIN_{0} BPA_{0} ID_{0}  npix_{0} x_p_{0} y_p_{0}           RA_p_{0}  Dec_p_{0}     RA_err_{0}    Dec_err_{0}   x_c_{0}   y_c_{0} RA_c_{0}           Dec_c_{0}      cFlag_{0}   x_wc_{0}   y_wc_{0}   RA_wc_{0} Dec_wc_{0}   wcFlag_{0}       xmin_{0}       xmax_{0}       ymin_{0}       ymax_{0}        rms_{0}    BWScorr_{0} M_{0}    SNR_OBS_{0}     SNR_FIT_{0}         SNR_{0}        S_p_OBS_{0}        S_p_FIT_{0}            S_p_{0}         S_p_CB_{0}      S_p_CBBWS_{0}  S_p_CBBWS_err_{0}      S_int_OBS_{0}    S_int_OBSCB_{0}          S_int_{0}       S_int_CB_{0}   S_int_CB_err_{0}    R_EST_{0}     VisArea_{0}\n'.format(postfix)
+        s = 'Catalog_name_{0} rms_{0} BMAJ_{0} BMIN_{0} BPA_{0} ID_{0}  npix_{0} x_p_{0} y_p_{0}           RA_p_{0}  Dec_p_{0}     RA_err_{0}    Dec_err_{0}   x_c_{0}   y_c_{0} RA_c_{0}           Dec_c_{0}      cFlag_{0}   x_wc_{0}   y_wc_{0}   RA_wc_{0} Dec_wc_{0}   wcFlag_{0}       xmin_{0}       xmax_{0}       ymin_{0}       ymax_{0}        rms_{0}    BWScorr_{0} M_{0}    SNR_OBS_{0}     SNR_FIT_{0}         SNR_{0}        S_p_OBS_{0}        S_p_FIT_{0}            S_p_{0}         S_p_CB_{0}      S_p_CBBWS_{0}  S_p_CBBWS_err_{0}      S_int_OBS_{0}    S_int_OBSCB_{0}          S_int_{0}       S_int_CB_{0}   S_int_CB_err_{0}    R_EST_{0}     VisArea_{0}\n'.format(postfix)
         s = ' '.join(s.split())+'\n'
         s = s.replace(' ',',')
         os.system('touch catalogue_BLOBCAT_%s.csv' % postfix)

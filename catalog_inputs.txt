@@ -8,7 +8,7 @@ edge = 10                  ## Edge number of pixels not to consider for catalogi
 shorthand = False          ## If true, catalog names will be appended to the first 8 characters
 useSAD = False             ## If True SAD will be used, otherwise blobcat is used (C. Hales+12)
 split_catalogues = True    ## Will separate catalogs into separate files (will ignore postfix)
-postfix = 'natural_weight' ## Append this to the catalog name and column rows
+postfix = natural_weight ## Append this to the catalog name and column rows
 
 ## Inputs for SAD
 AIPS_user = 1002
@@ -21,7 +21,7 @@ ppe = 0.01                  ## Percentage peak SB pixellation error
 cpeRA = 0.005              ## Error in phase cal RA (arcsec)
 cpeDec = 0.005             ## Error in phase cal Dec (arcsec)
 pasbe = 0.2                ## Surface Brightness error from calibration in per cent
-run_BANE = True            ## Runs BANE (aegean) to create a rms map before cataloging
+run_BANE = True             ## Runs BANE (aegean) to create a rms map before cataloging
 use_BANE_rms = True        ## Takes rms of each file (needs to be appended with _rms.fits)
 
 ### Output options
