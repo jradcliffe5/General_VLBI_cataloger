@@ -22,7 +22,10 @@ for file in os.listdir('./'):
     if file.startswith('catalogue') and file.endswith('.csv'):
         postfix = file.split('_')[1].split('.')[0]
         df = pd.read_csv(file,delimiter=',')
-        RA = 360+df['RA_c_%s' % postfix]
+        if RA < 0:
+            RA = 360+df['RA_c_%s' % postfix]
+        else:
+            RA = df['RA_c_%s' % postfix]
         Dec= df['Dec_c_%s' % postfix]
         names = df['Catalog_name']
 
