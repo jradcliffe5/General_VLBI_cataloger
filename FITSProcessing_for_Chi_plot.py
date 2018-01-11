@@ -33,13 +33,13 @@ fig_size[1] = 9
 fig_size[0] = 9
 plt.rcParams["figure.figsize"] = fig_size
 
-beaminfo = []
-
 matplotlib.rcParams['contour.negative_linestyle'] = 'dashed'
+
 ### Inputs ###
 subimsize = 4000
 units = 'uJy'
 nlevs = 5
+df = pd.read_csv('/Users/jackradcliffe/PhD/GOODSN_Catalogues/eg078_EVN_catalogues/eg078b/VLBI_Catalogue_fix_v14.csv')
 ##############
 
 if units == 'uJy':
@@ -52,8 +52,6 @@ else:
     print 'No unit specified [Jy/mJy/uJy], assuming Jy'
     flux_scaler = 1
 
-df = pd.read_csv('/Users/jackradcliffe/PhD/GOODSN_Catalogues/eg078_EVN_catalogues/eg078b/VLBI_Catalogue_fix_v13.csv')
-
 beaminfo = []
 matplotlib.rcParams['contour.negative_linestyle'] = 'dashed'
 for file in os.listdir('./'):
@@ -61,9 +59,9 @@ for file in os.listdir('./'):
         name =  df.NAME_VLA_1[df.Catalog_name == file[:8].upper()].tolist()[0]
     if file.endswith('casa.fits'):
         pixsiz = 400
-        edge = 5
+        edge = 50
         if file.endswith('PBCOR_NA_IM_casa.fits'):
-            pixsiz = 600
+            pixsiz = 100
             edge = 10
         if file.endswith('PBCOR_NA_IM_large_casa.fits'):
             pixsiz = 600
@@ -98,40 +96,16 @@ for file in os.listdir('./'):
             levs = np.append(levs,np.around(np.linspace(np.std(image_data),np.max(image_data),nlevs),decimals=0)[1:-1])
         cont = ax.contour(image_data, levels=levs, cmap='gray_r', alpha=0.5)
         im = ax.imshow(image_data, origin='lower',cmap="magma",interpolation="bicubic")
-        text = ax.text(0.5, 0.9,r'\textbf{J%s}' % str(name),color='w', horizontalalignment='center', verticalalignment='center',transform = ax.transAxes,size=60)
-        #divider = make_axes_locatable(ax)
-        #cax = divider.append_axes("top", size="5%", pad=0.00,
-        #                          axes_class=matplotlib.axes.Axes)
-        #if np.max(image_data) > 11:
-        #    tick = [np.min(image_data)]
-        #    tick = np.append(tick,np.around(np.linspace(np.std(image_data),np.max(image_data),7),decimals=0)[1:])
-            #tick = np.append(tick,np.max(image_data))
-        #    tick= tick.astype(int)
-        #    cb = plt.colorbar(orientation="horizontal",mappable=im, cax=cax, ticks=tick)
-        #else:
-        #    tick = [np.min(image_data)]
-        #    tick = np.append(tick,np.around(np.linspace(np.std(image_data),np.max(image_data),7),decimals=0)[1:].astype(int))
-            #tick = np.append(tick,np.max(image_data))
-        #    tick = tick.astype(int)
-        #    cb = plt.colorbar(orientation="horizontal",mappable=im, cax=cax, ticks=tick)
-        #cb.ax.xaxis.set_ticks_position('top')
-        #cb = plt.colorbar(mappable=im, cax=cax,  ticks=np.linspace(0,1,2).astype(int))
-        #cb.add_lines(cont)
-        #cax.set_xlabel("Flux Density ($\mathrm{\mu Jy\/bm^{-1}}$)", labelpad=-50)
-        '''
-        oldlabels = cb.ax.get_yticklabels()
-        oldlabels[-1] ='900+'
-        newlabels = oldlabels
-        print(newlabels)
-        cb.ax.set_yticklabels(newlabels)
-        '''
-        #cb.ax.xaxis.set_label_position('bottom')
+        namesize = 82
+        text = ax.text(0.98, 0.9,r'\textbf{J%s}' % (name.split('+')[0]),color='w', horizontalalignment='right', verticalalignment='center',transform = ax.transAxes,size=namesize)
+        text2 = ax.text(0.98, 0.76,r'\textbf{+%s}' % (name.split('+')[1]),color='w', horizontalalignment='right', verticalalignment='center',transform = ax.transAxes,size=namesize)
+
 
         from matplotlib.patches import Ellipse
         bmaj = hdu_list[0].header['BMAJ']/hdu_list[0].header['CDELT2']
         bmin = hdu_list[0].header['BMIN']/hdu_list[0].header['CDELT2']
         bpa = hdu_list[0].header['BPA']
-        beam_text = ax.text(0.98, 0.05,r'\textbf{%.1f$\times$%.1f mas}' % (hdu_list[0].header['BMAJ']*1000*3600,hdu_list[0].header['BMIN']*1000*3600),color='w', horizontalalignment='right', verticalalignment='center',transform = ax.transAxes,size=38)
+        beam_text = ax.text(0.98, 0.05,r'\textbf{%.1f$\times$%.1f mas}' % (hdu_list[0].header['BMAJ']*1000*3600,hdu_list[0].header['BMIN']*1000*3600),color='w', horizontalalignment='right', verticalalignment='center',transform = ax.transAxes,size=60)
         if file.endswith('NA_PBCOR_IM_casa.fits'):
             with open('beamsizes_taper.csv', 'a') as myfile:
                 beaminfo = [file, hdu_list[0].header['BMAJ']*1000*3600, hdu_list[0].header['BMIN']*1000*3600, bpa]
