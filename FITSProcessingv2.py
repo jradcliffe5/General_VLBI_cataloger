@@ -42,7 +42,7 @@ matplotlib.rcParams['contour.negative_linestyle'] = 'dashed'
 
 ### Inputs ###
 ### Only take subsection of data (in pixels) to increase comp. speed
-subimsize = 400
+subimsize = 4000
 units = 'uJy'
 nlevs = 5
 ### Set image size in pixels
@@ -68,16 +68,20 @@ else:
 for file in os.listdir('./'):
     if file.endswith('casa.fits'):
         ## VLBI EG078B specifics
-        '''
-        pixsiz = 40
-        edge = 5
-        if file.endswith('NA_IM_casa.fits'):
-            pixsiz = 60
+        pixsiz = 400
+        edge = 50
+        if file.endswith('PBCOR_NA_IM_casa.fits'):
+            pixsiz = 100
             edge = 10
         if file.endswith('PBCOR_NA_IM_large_casa.fits'):
-            pixsiz = 60
+            pixsiz = 600
             edge = 10
-        '''
+        if file.endswith('MSSC_FG_NA_IM_casa.fits'):
+            pixsiz = 150
+            edge = 18
+        if file.endswith('LO_EF_FG_NA_IM_casa.fits'):
+            pixsiz = 70
+            edge = 10
         print 'Plotting %s' % file
         ### Pull fits file and info
         hdu_list = fits.open(file)

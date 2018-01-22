@@ -66,6 +66,13 @@ for file in os.listdir('./'):
         if file.endswith('PBCOR_NA_IM_large_casa.fits'):
             pixsiz = 600
             edge = 10
+        if file.endswith('MSSC_FG_NA_IM_casa.fits'):
+            pixsiz = 150
+            edge = 18
+        if file.endswith('LO_EF_FG_NA_IM_casa.fits'):
+            pixsiz = 70
+            edge = 10
+        print pixsiz
         print 'Plotting for Chi plot %s' % file
         hdu_list = fits.open(file)
         mywcs = wcs.WCS(hdu_list[0].header)
