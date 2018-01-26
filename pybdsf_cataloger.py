@@ -35,6 +35,7 @@ detection_threshold = float(inputs['S_N_ratio'])
 postfix = str(inputs['postfix'])
 shorthand = inputs['shorthand']
 ds9 = inputs['ds9']
+split_catalogues = inputs['split_catalogues']
 
 def write_catalog_pybdsf(input_image,detection_threshold,shorthand):
         if shorthand == 'True':
@@ -74,7 +75,12 @@ def combine_pybdsf(shorthand,postfix):
                 text_file.write(names+names.join(lines[6:]))
             os.system('rm %s' % file)
 
-for i in os.listdir('./'):
-    if i.endswith('IM.fits'):
-        write_catalog_pybdsf(i,detection_threshold,shorthand)
-combine_pybdsf(shorthand=True,postfix=postfix)
+catalog_list = []
+for file in os.listdir('./'):
+    if file.endswith('.IM.fits'):
+        catalog_list = catalog_list + [file]
+if split_catalogues == 'True':
+    for k in catalog_list:
+        combine_pybdsf([k],k.split('.srl')[0])
+else:
+    combine_pybdsf(catalog_list,postfix)
