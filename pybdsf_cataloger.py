@@ -75,12 +75,8 @@ def combine_pybdsf(shorthand,postfix):
                 text_file.write(names+names.join(lines[6:]))
             os.system('rm %s' % file)
 
-catalog_list = []
-for file in os.listdir('./'):
-    if file.endswith('.IM.fits'):
-        catalog_list = catalog_list + [file]
-if split_catalogues == 'True':
-    for k in catalog_list:
-        combine_pybdsf([k],k.split('.srl')[0])
-else:
-    combine_pybdsf(catalog_list,postfix)
+for i in os.listdir('./'):
+    if i.endswith('.fits'):
+        write_catalog_pybdsf(i,detection_threshold,shorthand)
+if split_catalogues == 'False':
+    combine_pybdsf(shorthand=True,postfix=postfix)
