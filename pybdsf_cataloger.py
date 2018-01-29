@@ -55,14 +55,14 @@ def write_catalog_pybdsf(input_image,detection_threshold,shorthand):
 
 #write_catalog_pybdsf('HDFA0002_MSSC_FG_NA_IM.fits',detection_threshold)
 
-def combine_pybdsf(shorthand,postfix):
+def combine_pybdsf(shorthand,postfix,catalog_list):
     os.system('rm catalogue_PYBDSF_%s.csv' % postfix)
     if os.path.isfile('catalogue_pybdsf_%s.csv' % postfix) == False:
         s = 'Name_{0}, Source_id_{0}, Isl_id_{0}, RA_{0}, E_RA_{0}, DEC_{0}, E_DEC_{0}, Total_flux_{0}, E_Total_flux_{0}, Peak_flux_{0}, E_Peak_flux_{0}, RA_max_{0}, E_RA_max_{0}, DEC_max_{0}, E_DEC_max_{0}, Maj_{0}, E_Maj_{0}, Min_{0}, E_Min_{0}, PA_{0}, E_PA_{0}, Maj_img_plane_{0}, E_Maj_img_plane_{0}, Min_img_plane_{0}, E_Min_img_plane_{0}, PA_img_plane_{0}, E_PA_img_plane_{0}, DC_Maj_{0}, E_DC_Maj_{0}, DC_Min_{0}, E_DC_Min_{0}, DC_PA_{0}, E_DC_PA_{0}, DC_Maj_img_plane_{0}, E_DC_Maj_img_plane_{0}, DC_Min_img_plane_{0}, E_DC_Min_img_plane_{0}, DC_PA_img_plane_{0}, E_DC_PA_img_plane_{0}, Isl_Total_flux_{0}, E_Isl_Total_flux_{0}, Isl_rms_{0}, Isl_mean_{0}, Resid_Isl_rms_{0}, Resid_Isl_mean_{0}, S_Code_{0}\n'.format(postfix)
         os.system('touch catalogue_PYBDSF_%s.csv' % postfix)
         text_file = open('catalogue_PYBDSF_%s.csv' % postfix,'a')
         text_file.write(s)
-    for file in os.listdir('./'):
+    for file in catalog_list:
         if file.endswith('.srl'):
             lines = open('%s' % file).readlines()
             if shorthand == 'True':
@@ -74,9 +74,15 @@ def combine_pybdsf(shorthand,postfix):
                 #print names+names.join(lines[6:])
                 text_file.write(names+names.join(lines[6:]))
             os.system('rm %s' % file)
-
+catalog_list = []
 for i in os.listdir('./'):
     if i.endswith('.fits'):
         write_catalog_pybdsf(i,detection_threshold,shorthand)
+for file in os.listdir('./'):
+        if file.endswith('.srl'):
+            catalog_list = catalog_list + [file]
 if split_catalogues == 'False':
-    combine_pybdsf(shorthand=True,postfix=postfix)
+    combine_pybdsf(shorthand=shorthand,postfix=postfix,catalog_list=catalog_list)
+else:
+    for i in catalog_list:
+        combine_pybdsf(shorthand=shorthand,postfix=i.split('.srl')[0],catalog_list=[i])
