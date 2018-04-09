@@ -599,7 +599,7 @@ def parabfit(f):
     # pfCM = 9x6 coefficient matrix, see genparabCM()
 
     # Get c coefficients
-    c = np.linalg.lstsq(pfCM,f)[0]
+    c = np.linalg.lstsq(pfCM,f,rcond=None)[0]
 
     # To get the position of the peak, take df/dx=df/dy=0
     # 2 equations, 2 unknowns, can solve analytically
