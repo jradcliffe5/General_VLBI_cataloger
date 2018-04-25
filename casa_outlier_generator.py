@@ -20,14 +20,15 @@ def outlier_writer(RA,Dec,names,postfix,imsize,cell,gridder,deconvolver,nterms):
 
 for file in os.listdir('./'):
     if file.startswith('catalogue') and file.endswith('.csv'):
-        postfix = file.split('_')[1].split('.')[0]
+        postfix = file.split('catalogue_BLOBCAT_')[1].split('.csv')[0]
         df = pd.read_csv(file,delimiter=',')
+        RA = df['RA_c_%s' % postfix][0]
         if RA < 0:
             RA = 360+df['RA_c_%s' % postfix]
         else:
             RA = df['RA_c_%s' % postfix]
         Dec= df['Dec_c_%s' % postfix]
-        names = df['Catalog_name']
+        names = df['ID_%s' % postfix]
 
 outlier_writer(RA=RA,Dec=Dec,names=names,postfix=postfix,imsize=1024,cell='0.2arcsec',\
 gridder='standard',deconvolver='mtmfs',nterms=2)
