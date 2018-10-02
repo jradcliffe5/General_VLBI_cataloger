@@ -73,7 +73,7 @@ try:
 	from Wizardry.AIPSData import AIPSUVData as WizAIPSUVData
 	AIPS.userno = int(inputs['AIPS_user'])
 except ImportError:
-	print 'No AIPS/Parseltongue available, using BLOBCAT instead'
+	print('No AIPS/Parseltongue available, using BLOBCAT instead')
 	useSAD = 'False'
 
 '''
@@ -171,19 +171,19 @@ detections = []
 
 if useSAD == 'True':
 	os.system('rm catalogue_SAD_%s.csv' % postfix)
-	print 'RUNNING AIPS TASK SAD'
+	print('RUNNING AIPS TASK SAD')
 	for file in os.listdir('./'):
 		if file.endswith('_casa.fits'):
 			fitld = AIPSTask('FITLD')
 			hduheader = pyfits.open(file)[0].header
-			print file
+			print(file)
 			try:
 				data = np.array(pyfits.open(file)[0].data[0,0,edge:edge+rms_box,edge:edge+rms_box])
 			except IndexError:
 				data = np.array(pyfits.open(file)[0].data[edge:edge+rms_box,edge:edge+rms_box])
 			if auto_rms == 'True':
 				rms = float(np.sqrt(np.mean(data**2)))
-				print rms
+				print(rms)
 			fitld.datain = 'PWD:%s' % file
 			fitld.outname = str(i)
 			fitld.outclass = 'IM'
@@ -209,7 +209,7 @@ if useSAD == 'True':
 				BMIN = hduheader['BMIN']
 				BPA = hduheader['BPA']
 			except KeyError:
-				print 'Run casa_convert.py first to get beam parameters into header'
+				print('Run casa_convert.py first to get beam parameters into header')
 				sys.exit()
 			if len(lines) > 24:
 				detections = detections + [file]
@@ -230,14 +230,14 @@ if useSAD == 'True':
 	else:
 		SAD_fit_remove(catalog_list,postfix)
 	os.system('rm *.fitout')
-	print 'COMPLETE...'
+	print('COMPLETE...')
 else:
 	os.system('rm catalogue_BLOBCAT_%s.csv' % postfix)
-	print 'RUNNING BLOBCAT with parameters'
-	print '--dSNR=%.2f --fSNR=%.2f --pmep=%.4f --ppe=%.4f --pasbe=%.4f --cpeRA=%.6f --cpeDec=%.6f --edgemin=%d %s %s' % (S_N_ratio,SNR_flood,pmep,ppe,pasbe,cpeRA,cpeDec,int(edge),ds9,write_blobs)
+	print('RUNNING BLOBCAT with parameters')
+	print('--dSNR=%.2f --fSNR=%.2f --pmep=%.4f --ppe=%.4f --pasbe=%.4f --cpeRA=%.6f --cpeDec=%.6f --edgemin=%d %s %s' % (S_N_ratio,SNR_flood,pmep,ppe,pasbe,cpeRA,cpeDec,int(edge),ds9,write_blobs))
 	for file in os.listdir('./'):
 		if file.endswith('_casa.fits'):
-			print 'Cataloguing %s' % file
+			print('Cataloguing %s' % file)
 			if run_BANE == 'True':
 				rms_map = file[:-5]+'_rms.fits'
 				os.system('rm %s %s_bkg.fits' % (rms_map,file[:-5]))
@@ -249,7 +249,7 @@ else:
 				data = np.array(pyfits.open(file)[0].data[edge:edge+rms_box,edge:edge+rms_box])
 			if auto_rms == 'True':
 				rms = float(np.sqrt(np.mean(data**2)))
-				print rms
+				print(rms)
 			if use_BANE_rms == 'True':
 				print('Using BANE rms')
 				rms_map = file[:-5]+'_rms.fits'
@@ -262,7 +262,7 @@ else:
 				BMIN = hduheader['BMIN']
 				BPA = hduheader['BPA']
 			except KeyError:
-				print 'Run casa_convert.py first to get beam parameters into header'
+				print('Run casa_convert.py first to get beam parameters into header')
 				sys.exit()
 			if shorthand == 'True':
 				names = file[:8]
@@ -279,7 +279,7 @@ else:
 			elif ds9 == '--ds9':
 				os.system('rm %s_ds9.reg' % file[:-5])
 			os.system('rm %s_blobs.txt' % file[:-5])
-	print 'COMPLETE...'
+	print('COMPLETE...')
 	catalog_list = []
 	for file in os.listdir('./'):
 		if file.endswith('.blobs'):
