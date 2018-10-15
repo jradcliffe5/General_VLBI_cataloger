@@ -27,7 +27,7 @@
 #       BOCHUM, nor the NAMES OF ITS CONTRIBUTORS may be used to endorse or
 #       promote products derived from this software without specific prior
 #       written permission.
-#
+# 
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -117,75 +117,75 @@ def parse_cmds():
     version4 = "http://blobcat.sourceforge.net/"
     versionFull = '%s\n%s\n%s\n%s\n' % (version1, version2, version3, version4)
     parser = OptionParser(usage=usage, version=versionFull)
-    parser.add_option("--rmsval", dest="rmsval", metavar="REAL",
-                      default=False, type="float",
+    parser.add_option("--rmsval", dest="rmsval", metavar="REAL", 
+                      default=False, type="float", 
                       help="use constant rms value (Jy/beam) [default: %default]")
-    parser.add_option("--rmsmap", dest="rmsmap", metavar="FILE",
-                      default=False, type="string",
+    parser.add_option("--rmsmap", dest="rmsmap", metavar="FILE", 
+                      default=False, type="string", 
                       help="read in RMS noise FITS image [default: %default]")
-    parser.add_option("--bwsval", dest="bwsval", metavar="REAL",
-                      default=1.0, type="float",
+    parser.add_option("--bwsval", dest="bwsval", metavar="REAL", 
+                      default=1.0, type="float", 
                       help="use constant bws value (Jy/beam) [default: %default]")
-    parser.add_option("--bwsmap", dest="bwsmap", metavar="FILE",
-                      default=False, type="string",
+    parser.add_option("--bwsmap", dest="bwsmap", metavar="FILE", 
+                      default=False, type="string", 
                       help="read in bandwidth smearing FITS image [default: %default]")
-    parser.add_option("--bmaj", dest="bmaj", metavar="REAL",
-                      default=False, type="float",
+    parser.add_option("--bmaj", dest="bmaj", metavar="REAL", 
+                      default=False, type="float", 
                       help="set beam major axis (arcsec) [default: %default]")
-    parser.add_option("--bmin", dest="bmin", metavar="REAL",
-                      default=False, type="float",
+    parser.add_option("--bmin", dest="bmin", metavar="REAL", 
+                      default=False, type="float", 
                       help="set beam minor axis (arcsec) [default: %default]")
-    parser.add_option("--bpa", dest="bpa", metavar="REAL",
-                      default=False, type="float",
+    parser.add_option("--bpa", dest="bpa", metavar="REAL", 
+                      default=False, type="float", 
                       help="set beam PA (E from N) (deg) [default: %default]")
-    parser.add_option("--dSNR", dest="dSNR", metavar="REAL",
-                      default=5.0, type="float",
+    parser.add_option("--dSNR", dest="dSNR", metavar="REAL", 
+                      default=5.0, type="float", 
                       help="peak SNR cutoff for accepting blobs [default: %default]")
-    parser.add_option("--fSNR", dest="fSNR", metavar="REAL",
-                      default=2.6, type="float",
+    parser.add_option("--fSNR", dest="fSNR", metavar="REAL", 
+                      default=2.6, type="float", 
                       help="SNR floor to flood down to [default: %default]")
-    parser.add_option("--pmep", dest="pmep", metavar="REAL",
-                      default=1.0, type="float",
+    parser.add_option("--pmep", dest="pmep", metavar="REAL", 
+                      default=1.0, type="float", 
                       help="% max estimated pixellation (range 0-1) [default: %default]")
-    parser.add_option("--cpeRA", dest="cpeRA", metavar="REAL",
-                      default=0.01, type="float",
+    parser.add_option("--cpeRA", dest="cpeRA", metavar="REAL", 
+                      default=0.01, type="float", 
                       help="phase calibrator RA pos. error (arcsec) [default: %default]")
-    parser.add_option("--cpeDec", dest="cpeDEC", metavar="REAL",
-                      default=0.01, type="float",
+    parser.add_option("--cpeDec", dest="cpeDEC", metavar="REAL", 
+                      default=0.01, type="float", 
                       help="phase calibrator Dec pos. error (arcsec) [default: %default]")
-    parser.add_option("--SEM", dest="sem", metavar="REAL",
-                      default=0.5, type="float",
+    parser.add_option("--SEM", dest="sem", metavar="REAL", 
+                      default=0.5, type="float", 
                       help="SELFCAL SEM of gain phases (deg) [default: %default]")
-    parser.add_option("--pasbe", dest="pasbe", metavar="REAL",
-                      default=0.05, type="float",
+    parser.add_option("--pasbe", dest="pasbe", metavar="REAL", 
+                      default=0.05, type="float", 
                       help="% absolute SB error (range 0-1) [default: %default]")
-    parser.add_option("--ppe", dest="ppe", metavar="REAL",
-                      default=0.02, type="float",
+    parser.add_option("--ppe", dest="ppe", metavar="REAL", 
+                      default=0.02, type="float", 
                       help="% peak SB pixellation error (range 0-1) [default: %default]")
-    parser.add_option("--cb", dest="cb", metavar="REAL",
-                      default=0.e-6, type="float",
+    parser.add_option("--cb", dest="cb", metavar="REAL", 
+                      default=0.e-6, type="float", 
                       help="average clean bias correction (+Jy/beam) [default: %default]")
-    parser.add_option("--lamfac", dest="lamfac", metavar="REAL",
-                      default=3.5, type="float",
+    parser.add_option("--lamfac", dest="lamfac", metavar="REAL", 
+                      default=3.5, type="float", 
                       help="lambda factor for bias correction [default: %default]")
     parser.add_option("--visArea", dest="visArea", action="store_true", default=False,
                       help="compute visibility areas (slows code) [default: %default]")
-    parser.add_option("--minpix", dest="minpix", metavar="INT",
-                      default=5, type="int",
+    parser.add_option("--minpix", dest="minpix", metavar="INT", 
+                      default=5, type="int", 
                       help="minimum blob size in pixels [default: %default]")
-    parser.add_option("--maxpix", dest="maxpix", metavar="INT",
-                      default=100000, type="int",
+    parser.add_option("--maxpix", dest="maxpix", metavar="INT", 
+                      default=100000, type="int", 
                       help="maximum blob size in pixels [default: %default]")
-    parser.add_option("--pixdim", dest="pixdim", metavar="(RA,Dec)", nargs=2,
-                      default=(3, 3), type="int",
+    parser.add_option("--pixdim", dest="pixdim", metavar="(RA,Dec)", nargs=2, 
+                      default=(3, 3), type="int", 
                       help="minimum pixels in RA, Dec dimensions [default: %default]")
-    parser.add_option("--edgemin", dest="edgemin", metavar="INT",
-                      default=10, type="int",
+    parser.add_option("--edgemin", dest="edgemin", metavar="INT", 
+                      default=10, type="int", 
                       help="edge buffer in pixels for extracting blobs [default: %default]")
     parser.add_option("--write", dest="write", action="store_true", default=False,
                       help="write flooded blobs to new FITS image [default: %default]")
-    parser.add_option("--hfill", dest="hfill", metavar="REAL",
-                      default=999.0, type="float",
+    parser.add_option("--hfill", dest="hfill", metavar="REAL", 
+                      default=999.0, type="float", 
                       help="output blob highlight value (Jy/beam) [default: %default]")
     parser.add_option("--ds9", dest="ds9", action="store_true", default=False,
                       help="write DS9 annotation file [default: %default]")
@@ -201,7 +201,7 @@ def parse_cmds():
 		      default=False, type="float",
 		      help="dynamic range of screen plot [default: automagic]")
     (options, args) = parser.parse_args()
-
+    
     if len(args) != 1:
         msg = "Incorrect number of arguments\n"
         msg += "                Rerun with --help for instructions.\n"
@@ -214,7 +214,7 @@ def read_data(filename):
     hdulist.info()
     data = hdulist[0].data
     header = hdulist[0].header
-    keys = header.keys()
+    keys = header.ascard.keys()
     refp = {}
     for key in keys:
         refp[key.lower()] = header[key]
@@ -265,7 +265,7 @@ def pix2coords(pixRA, pixDec, c, p):
       (ra, dec) = pix2sinwcs(pixRAm, pixDecm, c['crpix1'], c['crpix2'],
                                  c['cdelt1'], c['cdelt2'], c['crval1'],
                                  c['crval2'], llcos, llsin)
-
+    
     return (ra, dec)
 
 
@@ -277,7 +277,7 @@ def pix2zeawcs(x, y, xpix, ypix, dx, dy, xval, yval, llcos=1, llsin=0):
     #   (in order) eq14, eq15, eq70, table13-ZEA_params, paragraph
     #   under "phi_p=LONPOLEa" p1079, and equations 2.
     # Note that arg(u,v) in C&G2002 = atan(v,u) in python!
-    #
+    # 
     # the defaults for llcos and llsin are assuming no rotation
     # x,y          input pixel values (in abspix)
     # xpix,ypix    pixel coordinate of reference pixel (crpix)
@@ -286,30 +286,30 @@ def pix2zeawcs(x, y, xpix, ypix, dx, dy, xval, yval, llcos=1, llsin=0):
     # llcos,llsin  rotation values
     syval = sin(radians(yval))
     cyval = cos(radians(yval))
-
+    
     # Determine phi_p = LONPOLEa
     if yval >= 90.:
       phip = 0.
     else:
       phip = pi
-
+    
     # Determine how far the pixel is from the reference pixel in radians
     # (ie calculate the "intermediate world" or "projection plane" coordinates)
     M = (y - ypix)*radians(dy)
     L = (x - xpix)*radians(dx)
     M = M*llcos + L*llsin
     L = L*llcos - M*llsin
-
+    
     # Determine native spherical coordinates in radians
     phi = atan2( L , -M )
     R = sqrt( M**2 + L**2 )
     theta = pi/2. - 2. * asin(R/2.)
-
+    
     stheta = sin(theta)
     ctheta = cos(theta)
     sphipi = sin(phi - phip)
     cphipi = cos(phi - phip)
-
+    
     # Determine celestial spherical coordinates in degrees
     ra  = xval + degrees(atan2(-ctheta*sphipi , stheta*cyval - ctheta*syval*cphipi))
     dec = degrees(asin((stheta*syval + ctheta*cyval*cphipi)))
@@ -324,7 +324,7 @@ def pix2aitwcs(x, y, xpix, ypix, dx, dy, xval, yval, llcos=1, llsin=0):
     #   (in order) eq108, eq106, eq107, table13-ZEA_params, paragraph
     #   under "phi_p=LONPOLEa" p1079, section 2.4, and equations 2.
     # Note that arg(u,v) in C&G2002 = atan(v,u) in python!
-    #
+    # 
     # Native (long,lat) of the fiducial point for AIT is (0,0)
     #
     # the defaults for llcos and llsin are assuming no rotation
@@ -335,13 +335,13 @@ def pix2aitwcs(x, y, xpix, ypix, dx, dy, xval, yval, llcos=1, llsin=0):
     # llcos,llsin  rotation values
     syval = sin(radians(yval))
     cyval = cos(radians(yval))
-
+    
     # Determine phi_p = LONPOLEa
     if yval >= 0.:
       phip = 0.
     else:
       phip = pi
-
+    
     # Go through all the stuff in section 2.4, yikes...
     deltapP = atan2(0. , cos(phip)) + acos(syval)
     deltapM = atan2(0. , cos(phip)) - acos(syval)
@@ -360,34 +360,34 @@ def pix2aitwcs(x, y, xpix, ypix, dx, dy, xval, yval, llcos=1, llsin=0):
       deltap = deltapP
     elif fabs(deltapM) <= pi/2.:	# point 5 (note also final comment in point 3)
       deltap = deltapM
-
-    sdelp = sin(deltap)
+    
+    sdelp = sin(deltap) 
     cdelp = cos(deltap)
-
+    
     if deltap == pi/2.:			# point 2
       alphap = xval + degrees(phip) - 180.
     elif deltap == -pi/2.:		# point 2
       alphap = xval - degrees(phip)
     else:
       alphap = xval
-
+    
     # Determine how far the pixel is from the reference pixel in radians
     # (ie calculate the "intermediate world" or "projection plane" coordinates)
     M = (y - ypix)*radians(dy)
     L = (x - xpix)*radians(dx)
     M = M*llcos + L*llsin
     L = L*llcos - M*llsin
-
+    
     # Determine native spherical coordinates in radians
     Z     = sqrt(1. - (L/4.)**2 - (M/2.)**2)
     phi   = 2.*atan2( Z/2.*L , 2.*Z**2-1. )
     theta = asin(M*Z)
-
+    
     stheta = sin(theta)
     ctheta = cos(theta)
     sppp   = sin(phi - phip)
     cppp   = cos(phi - phip)
-
+    
     # Determine celestial spherical coordinates in degrees
     ra  = alphap + degrees(atan2(-ctheta*sppp , stheta*cdelp - ctheta*sdelp*cppp))
     dec = degrees(asin(stheta*sdelp + ctheta*cdelp*cppp))
@@ -398,7 +398,7 @@ def pix2ncpwcs(x, y, xpix, ypix, dx, dy, xval, yval, llcos=1, llsin=0):
     # calculates NCP projection coordinates from pixels
     # NOTE THAT THIS VERSION EXPECTS INPUTS IN DEGREES!
     # see AIPS memo 27 for details on how to obtain these equations
-    #
+    # 
     # the defaults for llcos and llsin are assuming no rotation
     # x,y          input pixel values (in abspix)
     # xpix,ypix    pixel coordinate of reference pixel (crpix)
@@ -407,14 +407,14 @@ def pix2ncpwcs(x, y, xpix, ypix, dx, dy, xval, yval, llcos=1, llsin=0):
     # llcos,llsin  rotation values
     syval = sin(radians(yval))
     cyval = cos(radians(yval))
-
+    
     # Determine how far the pixel is from the reference pixel in radians
     # (ie calculate the "intermediate world" or "projection plane" coordinates)
     M = (y - ypix)*radians(dy)
     L = (x - xpix)*radians(dx)
     M = M*llcos + L*llsin
     L = L*llcos - M*llsin
-
+    
     ra  = degrees(atan(L / (cyval - M*syval))) + xval
     dec = sign(yval) * degrees(acos((cyval - M*syval)/cos(radians(ra-xval))))
     return (ra, dec)
@@ -424,7 +424,7 @@ def pix2sinwcs(x, y, xpix, ypix, dx, dy, xval, yval, llcos=1, llsin=0):
     # calculates SIN projection coordinates from pixels
     # NOTE THAT THIS VERSION EXPECTS INPUTS IN DEGREES!
     # see AIPS memo 27 for details on how to obtain these equations
-    #
+    # 
     # the defaults for llcos and llsin are assuming no rotation
     # x,y          input pixel values (in abspix)
     # xpix,ypix    pixel coordinate of reference pixel (crpix)
@@ -433,14 +433,14 @@ def pix2sinwcs(x, y, xpix, ypix, dx, dy, xval, yval, llcos=1, llsin=0):
     # llcos,llsin  rotation values
     syval = sin(radians(yval))
     cyval = cos(radians(yval))
-
+    
     # Determine how far the pixel is from the reference pixel in radians
     # (ie calculate the "intermediate world" or "projection plane" coordinates)
     M = (y - ypix)*radians(dy)
     L = (x - xpix)*radians(dx)
     M = M*llcos + L*llsin
     L = L*llcos - M*llsin
-
+    
     ra  = degrees(atan(L / (cyval*sqrt(1-L**2-M**2) - M*syval))) + xval
     dec = degrees(asin(M*cyval + syval*sqrt(1-L**2-M**2)))
     return (ra, dec)
@@ -451,7 +451,7 @@ def ra2hms(decimalRA):
     h = floor(r)
     m = floor((r-h)*60.)
     s = (r-h-m/60.)*3600.
-
+    
     mystring = '%i:%i:%.2f' % (h,m,s)
     return (mystring)
 
@@ -461,7 +461,7 @@ def dec2dms(decimalDEC):
     d = floor(dec)
     m = floor((dec-d)*60.)
     s = (dec-d-m/60.)*3600.
-
+    
     if decimalDEC >= 0:
         mystring = '%i:%i:%.2f' % (d,m,s)
     else:
@@ -527,7 +527,7 @@ def flood(data, status, bounds, peak, cutoff):
     for pixel in queue:
         if status[pixel] & VISITED:
             continue
-
+    
         status[pixel] |= VISITED
 
         blob.append(pixel)
@@ -554,24 +554,24 @@ def blobarea(cut,p,rms,bws,n,c):
     beamsize = c['bmaj'] * c['bmin']
     beamsizeLOCAL = beamsize / bws
     beams = n / (pi/4. * log(p/(cut*rms),2.) * beamsizeLOCAL / fabs(c['cdelt1']*c['cdelt2']) )
-
+    
     return (beams)
 
 
 def getintf(minSNR,maxSNR,floodf):
     # Equation 17
     totf = floodf / (erf(sqrt(-log(minSNR/maxSNR))))**2
-
+    
     return (totf)
 
 
 def genparabCM():
     # Generate 9x6 dummy coefficient matrix for parabfit
     # Do this here to prevent having to make it for each blob
-
+    
     global pfCM
     pfCM = np.zeros((9,6))
-
+    
     k = 0
     for i in range(1,4):
       y = i-1
@@ -594,25 +594,25 @@ def parabfit(f):
     # of equations, and n=6 is the number of unknowns.
     #
     # 2D parabola = c0 + c1*x + c2*y + c3*x*y + c4*x**2 + c5*y**2
-    #
+    # 
     # f = 9 element vector of pixel values in 3x3 array about peak
     # pfCM = 9x6 coefficient matrix, see genparabCM()
-
+    
     # Get c coefficients
-    c = np.linalg.lstsq(pfCM,f,rcond=0)[0]
-
+    c = np.linalg.lstsq(pfCM,f)[0]
+    
     # To get the position of the peak, take df/dx=df/dy=0
     # 2 equations, 2 unknowns, can solve analytically
     xp = ( c[1] - 0.5*c[2]*c[3]/c[5] ) / ( 0.5*c[3]**2/c[5] - 2.*c[4] )
     yp = ( -c[1] - 2.*c[4]*xp ) / c[3]
-
+    
     # FYI, the fitted peak in coordinates you know and love are:
     # xpix = peak[1] + xp - 1
     # ypix = peak[0] + yp - 1
-
+    
     # now get the value of the parabolic fit at the fitted peak
     fittedpeak = c[0] + c[1]*xp + c[2]*yp + c[3]*xp*yp + c[4]*xp**2 + c[5]*yp**2
-
+    
     return (fittedpeak)
 
 
@@ -635,39 +635,39 @@ def poserr(sigcal,sigfr,pcsnr,w,c):
 	# ie when PA=0, this returns the BMAJ
 	b = c['bmaj'] * c['bmin'] / sqrt( ( c['bmaj']*sin(radians(c['bpa'])) )**2 + \
 	                                  ( c['bmin']*cos(radians(c['bpa'])) )**2 )
-
+    
     # factor from equation 37
     errfac = 1.4
-
+    
     # return error in deg
     perr = sqrt((sigcal/3600.)**2 + (sigfr/180./sqrt(2.)*b)**2 + (b/(errfac*pcsnr))**2)
-
+    
     return (perr)
 
 
 def genlookup():
     # populates lookup table for correctpeak function below
     # Equation 14
-
+    
     global cpM , cpA
-
+    
     a1 = 0.89
     a2 = 0.27
     a3 = 3.75
     a4 = -3.67
     a5 = 1.61
-
+    
     smin = 0.
     smax = 2.
     step = 0.01
-
+    
     # populate table for M = 1 --> ~30
     k = int((smax-smin)/step) + 1
     # cpM = M, the known x-value in correctpeak()
     # cpA = E[snr], the unknown y-value in correctpeak()
     cpM = np.zeros(k)
     cpA = np.zeros(k)
-
+    
     # Note that range(a,b) goes from a --> b-1
     for i in range(0,k):
         cpA[i] = smin + i*step
@@ -686,7 +686,7 @@ def correctpeak(Aobs,m):
         A = Aobs - cpA[abs(cpM-m).argmin()]
     else:
         A = Aobs
-
+    
     return (A)
 
 
@@ -1039,14 +1039,14 @@ for peak in peaks:
 
         # filter on blob dimension
         if npixRA >= PIX_DIM[0] and npixDec >= PIX_DIM[1]:
-
+            
 	    #  only attempt to get fitted peak if the pixel in
 	    #+ question is the maximum within a 3x3 array
 	    fitarray = np.array(dataimg[peak[0]-1:peak[0]+2,peak[1]-1:peak[1]+2].reshape(9))
 	    if dataimg[peak] >= fitarray.max():
 	        # get fitted peak SB using 2D parabola to 3x3 array about peak
 	        peakFIT = parabfit(fitarray)
-
+	        
 	        #  if peakFIT is smaller than peak (which is possible for small values
 	        #+ of N; see Fig. A1 of the BLOBCAT manuscript), then for consistency, choose
 	        #+ to accept the observed peak as the fitted peak
@@ -1054,36 +1054,36 @@ for peak in peaks:
 	            peakFIT = dataimg[peak]
 	    else:
 	        peakFIT = dataimg[peak]
-
+	    
 	    # blobs satisfying PEAK_DETECT may not satisfy PEAK_CUTOFF
 	    # filter on PEAK_CUTOFF using the fitted peak SB
 	    if peakFIT/datarms[peak] >= PEAK_CUTOFF:
-
+		
 		# area of source at lambda*sig below observed raw peak
 		pixcount = 0
 		for pixel in blob:
 		    if datasnr[pixel] >= datasnr[peak]-lamval:
 		        pixcount += 1
-
+		
 		# number of independent beams
-		Mval = pixcount / (sqrt(12)/4/log(2.) * refp['bmaj'] * refp['bmin'] /
+		Mval = pixcount / (sqrt(12)/4/log(2.) * refp['bmaj'] * refp['bmin'] / 
 		                   fabs(refp['cdelt1']*refp['cdelt2']) )
-
+		
 		# get peak bias corrected SNR
 		Aval = correctpeak(peakFIT/datarms[peak],Mval)
-
+		
 		# Aval may now be smaller than PEAK_CUTOFF
 		# filter on PEAK_CUTOFF again...
 		if Aval >= PEAK_CUTOFF:
-
+		    
 		    # print out results
 		    nblobs += 1
 		    print nblobs, '(', peak[1],',',peak[0], ') =', npixels, 'pixels'
-
+		    
 		    (peakra, peakdec) = pix2coords(peak[1], peak[0], refp, proj)
 		    #peakraHMS  = ra2hms(peakra)
 		    #peakdecDMS = dec2dms(peakdec)
-
+		    
 		    # get unweighted centroid position
 		    peakC = np.average(blob, axis=0)
 		    (peakraC, peakdecC) = pix2coords(peakC[1], peakC[0], refp, proj)
@@ -1092,7 +1092,7 @@ for peak in peaks:
 		        ctFlag = 1
 		    else:
 		        ctFlag = 0
-
+		    
 		    # get weighted centroid position
 		    wts = datasnr[np.array(blob)[:,0],np.array(blob)[:,1]]
 		    peakWC = np.average(blob, axis=0, weights=wts)
@@ -1102,44 +1102,44 @@ for peak in peaks:
 		        wctFlag = 1
 		    else:
 		        wctFlag = 0
-
+		    
 		    # get peak bias corrected peak SB
 		    peakCORR = Aval*datarms[peak]
-
+		    
 		    # calculate positional errors
 		    RAerr  = poserr(calRAerr,semerr,Aval,1,refp)
 		    DECerr = poserr(calDECerr,semerr,Aval,2,refp)
-
+		    
 		    # Bottom left going clockwise
 		    (ra1, dec1) = pix2coords(border[0], border[2], refp, proj)
 		    (ra2, dec2) = pix2coords(border[1], border[2], refp, proj)
 		    (ra3, dec3) = pix2coords(border[1], border[3], refp, proj)
 		    (ra4, dec4) = pix2coords(border[0], border[3], refp, proj)
-
+		    
 		    # clean bias correction
 		    peakCB = peakCORR + CBcorr
 		    fluxCB = flux + npixels * CBcorr
-
+		    
 		    # get flux density in Jy, not surface brightness in Jy/beam
 		    flux   = flux / beamconv
 		    fluxCB = fluxCB / beamconv
-
+		    
 		    # correct flux based on Gaussian morphology estimate of what
 		    #+ has been missed below the SNR flood cutoff
 		    fluxCORR   = getintf(FLOOR_CUTOFF,Aval,flux)
 		    fluxCBCORR = getintf(FLOOR_CUTOFF,peakCB/datarms[peak],fluxCB)
-
+		    
 		    # apply bandwidth smearing correction to peak SB
 		    BWScorr   = 1 / dataBWS[peak]
 		    peakCBBWS = peakCB * BWScorr
-
+		    
 		    # estimate measurement errors
 		    peakerr = sqrt((abserr*peakCBBWS)**2+(pixerr*peakCBBWS)**2+(BWScorr*datarms[peak])**2)
 		    fluxerr = sqrt((abserr*fluxCBCORR)**2+(datarms[peak])**2)
-
+		    
 		    # diagnostic
 		    Rest = blobarea(FLOOR_CUTOFF,peakCORR,datarms[peak],dataBWS[peak],npixels,refp)
-
+		    
 		    #  visibility area (observable source density), taking into account both
 		    #+ bandwidth smearing and image sensitivity
 		    if options.visArea:
@@ -1147,7 +1147,7 @@ for peak in peaks:
 		                float(totpix))
 		    else:
 		        visA = -1.
-
+		    
 		    print >> pos, '%8d' % nblobs,
 		    print >> pos, '%10d' % npixels,
 		    print >> pos, '%10d' % peak[1],
@@ -1188,12 +1188,12 @@ for peak in peaks:
 		    print >> pos, '%14.6e' % fluxerr,
 		    print >> pos, '%8.2f' % Rest,
 		    print >> pos, '%11.3e' % visA
-
+		    
 		    (ra1, dec1) = pix2coords(border[0], border[2], refp, proj)
 		    (ra2, dec2) = pix2coords(border[1], border[2], refp, proj)
 		    (ra3, dec3) = pix2coords(border[1], border[3], refp, proj)
 		    (ra4, dec4) = pix2coords(border[0], border[3], refp, proj)
-
+		    
 		    # Ain't nothing l33t about the annotation files...just make boxes
 		    if options.ds9:
 		        # ds9 pixels start from 1, not 0 like kvis
@@ -1201,33 +1201,33 @@ for peak in peaks:
 				% (border[0]+1, border[2]+1, border[1]+1, border[2]+1, \
 				   border[1]+1, border[3]+1, border[0]+1, border[3]+1, \
 				   border[0]+1, border[2]+1, nblobs)
-
+		    
 		    if options.kvis:
 		        print >> annK, "TEXT %.9f %.9f %d" % (peakra, peakdec, nblobs)
 		        print >> annK, "CLINES %f %f %f %f %f %f %f %f %f %f" \
 				% (ra1, dec1, ra2, dec2, ra3, dec3, ra4, dec4, ra1, dec1)
-
+		    
 		    for pixel in blob:
 		        dataimg[pixel] = BLOBBED
-
+		
 		else:
 		    print 'Blob has peak below SNR cutoff due to peak bias correction. Filtering.'
 		    nfilt_size += 1
-
+            
 	    # No need to accumulate filtering statistic for this loop.
-
+	
 	elif datasnr[peak] > PEAK_CUTOFF:
 	    #  only print those with SNR greater than PEAK_CUTOFF
 	    #+ so that pixellation rejections are not counted.
 	    print 'Flooded blob dimensions too small. Filtering.'
 	    nfilt_size += 1
-
+    
     elif npixels > MAX_PIX and datasnr[peak] > PEAK_CUTOFF:
 	#  only print those with SNR greater than PEAK_CUTOFF
 	#+ so that pixellation rejections are not counted.
         print 'Flooded blob npixels above max range. Filtering.'
         nfilt_size += 1
-
+    
     elif 0 < npixels < MIN_PIX and datasnr[peak] > PEAK_CUTOFF:
         #  blobs with zero pixels should not be counted, nor
 	#+ should those with SNR greater than PEAK_CUTOFF
