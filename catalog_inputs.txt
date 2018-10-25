@@ -3,7 +3,7 @@
 auto_rms = True            ## Determines the rms automatically
 rms_box= 250               ## Size of rms box if auto_rms is True (from TLC currently)
 rms = 4.4e-05              ## Constant rms value if auto_rms is False
-S_N_ratio = 6.             ## Peak S/N ratio
+S_N_ratio = 7.             ## Peak S/N ratio
 edge = 10                  ## Edge number of pixels not to consider for cataloging
 shorthand = False          ## If true, catalog names will be appended to the first 8 characters
 useSAD = False             ## If True SAD will be used, otherwise blobcat is used (C. Hales+12)
@@ -17,11 +17,11 @@ AIPS_user = 1002
 ### Cataloguing options
 SNR_flood = 3.             ## SNR ratio to flood down to 2.5-3 x rms is usually ok
 pmep = 1.                  ## Max estimate pixellation error
-ppe = 0.01                  ## Percentage peak SB pixellation error
-cpeRA = 0.005              ## Error in phase cal RA (arcsec)
-cpeDec = 0.005             ## Error in phase cal Dec (arcsec)
-pasbe = 0.2                ## Surface Brightness error from calibration in per cent
-run_BANE = True             ## Runs BANE (aegean) to create a rms map before cataloging
+ppe = 0.1                  ## Percentage peak SB pixellation error
+cpeRA = 0.05              ## Error in phase cal RA (arcsec)
+cpeDec = 0.05             ## Error in phase cal Dec (arcsec)
+pasbe = 0.1                ## Surface Brightness error from calibration in per cent
+run_BANE = False            ## Runs BANE (aegean) to create a rms map before cataloging
 use_BANE_rms = True        ## Takes rms of each file (needs to be appended with _rms.fits)
 
 ### Output options

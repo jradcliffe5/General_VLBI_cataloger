@@ -42,8 +42,8 @@ def write_catalog_pybdsf(input_image,detection_threshold,shorthand):
             name = input_image.split('_MSSC')[0]
         else:
             name = input_image
-        img = bdsf.process_image(input_image, adaptive_rms_box=True,thresh_pix=detection_threshold,\
-        thresh='hard')
+        img = bdsf.process_image(input_image, advanced_opts=True, group_by_isl=True, spline_rank=4, thresh_pix=detection_threshold,\
+        thresh='hard', thresh_isl=2.9)
         # Write the source list catalog. File is named automatically.
         img.write_catalog(format='csv', catalog_type='srl',clobber=True)
         if ds9 == 'True':
@@ -52,6 +52,7 @@ def write_catalog_pybdsf(input_image,detection_threshold,shorthand):
         img.export_image(outfile=name+'_gaus.residual.fits',img_type='gaus_resid',clobber=True)
         # Write the model image. File name is specified.
         img.export_image(outfile=name+'_gaus.model.fits',img_type='gaus_model',clobber=True)
+        img.export_image(outfile=name+'.rms.fits', img_type='rms', clobber=True)
 
 #write_catalog_pybdsf('HDFA0002_MSSC_FG_NA_IM.fits',detection_threshold)
 
