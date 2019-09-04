@@ -356,12 +356,12 @@ def pix2aitwcs(x, y, xpix, ypix, dx, dy, xval, yval, llcos=1, llsin=0):
     if fabs(deltapP) <= pi/2. and fabs(deltapM) <= pi/2.:	# point 4
       if yval >= 0.:		# want closest to +pi/2
         if deltapP > deltapM:
-	  deltap = deltapP
+	         deltap = deltapP
 	else:
 	  deltap = deltapM
       else:			# want closest to -pi/2
         if deltapP < deltapM:
-	  deltap = deltapP
+	         deltap = deltapP
 	else:
 	  deltap = deltapM
     elif fabs(deltapP) <= pi/2.:	# point 5 (note also final comment in point 3)
