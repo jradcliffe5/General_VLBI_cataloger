@@ -6,7 +6,15 @@ import math, time, datetime
 from numpy import *
 import itertools
 from time import gmtime, strftime, localtime
-import pyfits
+try:
+    import astropy.io.fits as pyfits
+except ImportError:
+    try:
+        print('Using pyfits')
+        import pyfits
+    except ImportError:
+        print('No pyfits or astropy installed... exiting!')
+        exit()
 import numpy as np
 from inspect import getsourcefile
 from os.path import abspath
