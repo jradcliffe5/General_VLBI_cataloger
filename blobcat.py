@@ -206,8 +206,8 @@ def parse_cmds():
     #                  default=False, type="string",
     #                  help="output plot of blobs (FILE.png) [default: %default]")
     parser.add_option("--pltRng", dest="pltminmax", metavar='(min,max)', nargs=2,
-          default=False, type="float",
-          help="dynamic range of screen plot [default: automagic]")
+		      default=False, type="float",
+		      help="dynamic range of screen plot [default: automagic]")
     (options, args) = parser.parse_args()
     
     if len(args) != 1:
@@ -222,7 +222,7 @@ def read_data(filename):
     hdulist.info()
     data = hdulist[0].data
     header = hdulist[0].header
-    keys = header.keys()
+    keys = header.ascard.keys()
     refp = {}
     for key in keys:
         refp[key.lower()] = header[key]
@@ -353,28 +353,28 @@ def pix2aitwcs(x, y, xpix, ypix, dx, dy, xval, yval, llcos=1, llsin=0):
     # Go through all the stuff in section 2.4, yikes...
     deltapP = atan2(0. , cos(phip)) + acos(syval)
     deltapM = atan2(0. , cos(phip)) - acos(syval)
-    if fabs(deltapP) <= pi/2. and fabs(deltapM) <= pi/2.: # point 4
-      if yval >= 0.:    # want closest to +pi/2
+    if fabs(deltapP) <= pi/2. and fabs(deltapM) <= pi/2.:	# point 4
+      if yval >= 0.:		# want closest to +pi/2
         if deltapP > deltapM:
-           deltap = deltapP
-  else:
-    deltap = deltapM
-      else:     # want closest to -pi/2
+	  deltap = deltapP
+	else:
+	  deltap = deltapM
+      else:			# want closest to -pi/2
         if deltapP < deltapM:
-           deltap = deltapP
-  else:
-    deltap = deltapM
-    elif fabs(deltapP) <= pi/2.:  # point 5 (note also final comment in point 3)
+	  deltap = deltapP
+	else:
+	  deltap = deltapM
+    elif fabs(deltapP) <= pi/2.:	# point 5 (note also final comment in point 3)
       deltap = deltapP
-    elif fabs(deltapM) <= pi/2.:  # point 5 (note also final comment in point 3)
+    elif fabs(deltapM) <= pi/2.:	# point 5 (note also final comment in point 3)
       deltap = deltapM
     
     sdelp = sin(deltap) 
     cdelp = cos(deltap)
     
-    if deltap == pi/2.:     # point 2
+    if deltap == pi/2.:			# point 2
       alphap = xval + degrees(phip) - 180.
-    elif deltap == -pi/2.:    # point 2
+    elif deltap == -pi/2.:		# point 2
       alphap = xval - degrees(phip)
     else:
       alphap = xval
@@ -493,33 +493,33 @@ def explore(data, status, queue, bounds, cutoff, pixel):
     (x, y) = pixel
     if x < 0 or y < 0:
         print '\n Uh-oh. Just found a pixel at coordinate' , pixel
-  print 'Something screwy going on, edge masking should have caught this.'
-  print '*** Code terminating ***'
-  sys.exit()
+	print 'Something screwy going on, edge masking should have caught this.'
+	print '*** Code terminating ***'
+	sys.exit()
 
     if x > 0:
         new = (x - 1, y)
         if not status[new] & QUEUED and data[new] >= cutoff:
-      queue.append(new)
-      status[new] |= QUEUED
+	    queue.append(new)
+	    status[new] |= QUEUED
 
     if x < bounds[0]:
         new = (x + 1, y)
         if not status[new] & QUEUED and data[new] >= cutoff:
-      queue.append(new)
-      status[new] |= QUEUED
+	    queue.append(new)
+	    status[new] |= QUEUED
 
     if y > 0:
         new = (x, y - 1)
         if not status[new] & QUEUED and data[new] >= cutoff:
-      queue.append(new)
-      status[new] |= QUEUED
+	    queue.append(new)
+	    status[new] |= QUEUED
 
     if y < bounds[1]:
         new = (x, y + 1)
         if not status[new] & QUEUED and data[new] >= cutoff:
-      queue.append(new)
-      status[new] |= QUEUED
+	    queue.append(new)
+	    status[new] |= QUEUED
 
 
 def flood(data, status, bounds, peak, cutoff):
@@ -584,13 +584,13 @@ def genparabCM():
     for i in range(1,4):
       y = i-1
       for j in range(1,4):
-  x = j-1
-  pfCM[k,0] = 1.
-  pfCM[k,1] = x
-  pfCM[k,2] = y
-  pfCM[k,3] = x*y
-  pfCM[k,4] = x*x
-  pfCM[k,5] = y*y
+	x = j-1
+	pfCM[k,0] = 1.
+	pfCM[k,1] = x
+	pfCM[k,2] = y
+	pfCM[k,3] = x*y
+	pfCM[k,4] = x*x
+	pfCM[k,5] = y*y
         k += 1
 
 
@@ -607,7 +607,7 @@ def parabfit(f):
     # pfCM = 9x6 coefficient matrix, see genparabCM()
     
     # Get c coefficients
-    c = np.linalg.lstsq(pfCM,f,rcond=-1)[0]
+    c = np.linalg.lstsq(pfCM,f)[0]
     
     # To get the position of the peak, take df/dx=df/dy=0
     # 2 equations, 2 unknowns, can solve analytically
@@ -636,13 +636,13 @@ def poserr(sigcal,sigfr,pcsnr,w,c):
     #
     # beam position angle assumed east from north
     if w == 1:
-  # ie when PA=0, this returns the BMIN
-  b = c['bmaj'] * c['bmin'] / sqrt( ( c['bmaj']*cos(radians(c['bpa'])) )**2 + \
-                                    ( c['bmin']*sin(radians(c['bpa'])) )**2 )
+	# ie when PA=0, this returns the BMIN
+	b = c['bmaj'] * c['bmin'] / sqrt( ( c['bmaj']*cos(radians(c['bpa'])) )**2 + \
+	                                  ( c['bmin']*sin(radians(c['bpa'])) )**2 )
     else:
-  # ie when PA=0, this returns the BMAJ
-  b = c['bmaj'] * c['bmin'] / sqrt( ( c['bmaj']*sin(radians(c['bpa'])) )**2 + \
-                                    ( c['bmin']*cos(radians(c['bpa'])) )**2 )
+	# ie when PA=0, this returns the BMAJ
+	b = c['bmaj'] * c['bmin'] / sqrt( ( c['bmaj']*sin(radians(c['bpa'])) )**2 + \
+	                                  ( c['bmin']*cos(radians(c['bpa'])) )**2 )
     
     # factor from equation 37
     errfac = 1.4
@@ -679,8 +679,8 @@ def genlookup():
     # Note that range(a,b) goes from a --> b-1
     for i in range(0,k):
         cpA[i] = smin + i*step
-  cpM[i] = 1. + a1*cpA[i] + a2*(cpA[i])**2 + a3*(cpA[i])**3 + \
-                            a4*(cpA[i])**4 + a5*(cpA[i])**5
+	cpM[i] = 1. + a1*cpA[i] + a2*(cpA[i])**2 + a3*(cpA[i])**3 + \
+	                          a4*(cpA[i])**4 + a5*(cpA[i])**5
 
 
 def correctpeak(Aobs,m):
@@ -848,12 +848,12 @@ if not ('bmaj' in refp.keys() and 'bmin' in refp.keys() and 'bpa' in refp.keys()
     # extract bmaj, bmin and bpa from history info
     if type(x[1])==str and 'bmaj' in x[1].lower():
       try:
-  line=x[1].lower().replace('=', '').split()
-  refp['bmaj']=float(line[line.index('bmaj')+1])
-  refp['bmin']=float(line[line.index('bmin')+1])
-  refp['bpa']=float(line[line.index('bpa')+1])
+	line=x[1].lower().replace('=', '').split()
+	refp['bmaj']=float(line[line.index('bmaj')+1])
+	refp['bmin']=float(line[line.index('bmin')+1])
+	refp['bpa']=float(line[line.index('bpa')+1])
       except:
-  print ' Couldn\'t extract beam info from file. Now checking if you specified bmaj/bmin/bpa explicitly...'
+	print ' Couldn\'t extract beam info from file. Now checking if you specified bmaj/bmin/bpa explicitly...'
 
 # overwrite with user-specified values if required
 if bmajSET:
@@ -1039,207 +1039,207 @@ for peak in peaks:
     if MIN_PIX <= npixels <= MAX_PIX:
         border = blob_border(blob)
         #  Recall that python stores the row (Dec) in x. However, to throw
-  #+ a spanner in the works, I have set blob_border to return things
-  #+ in the correct order, so things coming out of border are in
-  #+ order of: RAmin RAmax Decmin Decmax
+	#+ a spanner in the works, I have set blob_border to return things
+	#+ in the correct order, so things coming out of border are in
+	#+ order of: RAmin RAmax Decmin Decmax
         npixRA = border[1] - border[0]
-  npixDec = border[3] - border[2]
+	npixDec = border[3] - border[2]
 
         # filter on blob dimension
         if npixRA >= PIX_DIM[0] and npixDec >= PIX_DIM[1]:
             
-      #  only attempt to get fitted peak if the pixel in
-      #+ question is the maximum within a 3x3 array
-      fitarray = np.array(dataimg[peak[0]-1:peak[0]+2,peak[1]-1:peak[1]+2].reshape(9))
-      if dataimg[peak] >= fitarray.max():
-          # get fitted peak SB using 2D parabola to 3x3 array about peak
-          peakFIT = parabfit(fitarray)
-          
-          #  if peakFIT is smaller than peak (which is possible for small values
-          #+ of N; see Fig. A1 of the BLOBCAT manuscript), then for consistency, choose
-          #+ to accept the observed peak as the fitted peak
-          if dataimg[peak] > peakFIT:
-              peakFIT = dataimg[peak]
-      else:
-          peakFIT = dataimg[peak]
-      
-      # blobs satisfying PEAK_DETECT may not satisfy PEAK_CUTOFF
-      # filter on PEAK_CUTOFF using the fitted peak SB
-      if peakFIT/datarms[peak] >= PEAK_CUTOFF:
-    
-    # area of source at lambda*sig below observed raw peak
-    pixcount = 0
-    for pixel in blob:
-        if datasnr[pixel] >= datasnr[peak]-lamval:
-            pixcount += 1
-    
-    # number of independent beams
-    Mval = pixcount / (sqrt(12)/4/log(2.) * refp['bmaj'] * refp['bmin'] / 
-                       fabs(refp['cdelt1']*refp['cdelt2']) )
-    
-    # get peak bias corrected SNR
-    Aval = correctpeak(peakFIT/datarms[peak],Mval)
-    
-    # Aval may now be smaller than PEAK_CUTOFF
-    # filter on PEAK_CUTOFF again...
-    if Aval >= PEAK_CUTOFF:
-        
-        # print out results
-        nblobs += 1
-        print nblobs, '(', peak[1],',',peak[0], ') =', npixels, 'pixels'
-        
-        (peakra, peakdec) = pix2coords(peak[1], peak[0], refp, proj)
-        #peakraHMS  = ra2hms(peakra)
-        #peakdecDMS = dec2dms(peakdec)
-        
-        # get unweighted centroid position
-        peakC = np.average(blob, axis=0)
-        (peakraC, peakdecC) = pix2coords(peakC[1], peakC[0], refp, proj)
-        # is unweighted centroid located in a flooded pixel?
-        if (floor(peakC[0]),floor(peakC[1])) in blob:
-            ctFlag = 1
-        else:
-            ctFlag = 0
-        
-        # get weighted centroid position
-        wts = datasnr[np.array(blob)[:,0],np.array(blob)[:,1]]
-        peakWC = np.average(blob, axis=0, weights=wts)
-        (peakraWC, peakdecWC) = pix2coords(peakWC[1], peakWC[0], refp, proj)
-        # is weighted centroid located in a flooded pixel?
-        if (floor(peakWC[0]),floor(peakWC[1])) in blob:
-            wctFlag = 1
-        else:
-            wctFlag = 0
-        
-        # get peak bias corrected peak SB
-        peakCORR = Aval*datarms[peak]
-        
-        # calculate positional errors
-        RAerr  = poserr(calRAerr,semerr,Aval,1,refp)
-        DECerr = poserr(calDECerr,semerr,Aval,2,refp)
-        
-        # Bottom left going clockwise
-        (ra1, dec1) = pix2coords(border[0], border[2], refp, proj)
-        (ra2, dec2) = pix2coords(border[1], border[2], refp, proj)
-        (ra3, dec3) = pix2coords(border[1], border[3], refp, proj)
-        (ra4, dec4) = pix2coords(border[0], border[3], refp, proj)
-        
-        # clean bias correction
-        peakCB = peakCORR + CBcorr
-        fluxCB = flux + npixels * CBcorr
-        
-        # get flux density in Jy, not surface brightness in Jy/beam
-        flux   = flux / beamconv
-        fluxCB = fluxCB / beamconv
-        
-        # correct flux based on Gaussian morphology estimate of what
-        #+ has been missed below the SNR flood cutoff
-        fluxCORR   = getintf(FLOOR_CUTOFF,Aval,flux)
-        fluxCBCORR = getintf(FLOOR_CUTOFF,peakCB/datarms[peak],fluxCB)
-        
-        # apply bandwidth smearing correction to peak SB
-        BWScorr   = 1 / dataBWS[peak]
-        peakCBBWS = peakCB * BWScorr
-        
-        # estimate measurement errors
-        peakerr = sqrt((abserr*peakCBBWS)**2+(pixerr*peakCBBWS)**2+(BWScorr*datarms[peak])**2)
-        fluxerr = sqrt((abserr*fluxCBCORR)**2+(datarms[peak])**2)
-        
-        # diagnostic
-        Rest = blobarea(FLOOR_CUTOFF,peakCORR,datarms[peak],dataBWS[peak],npixels,refp)
-        
-        #  visibility area (observable source density), taking into account both
-        #+ bandwidth smearing and image sensitivity
-        if options.visArea:
-            visA = (float(len(np.where(datarmsBS <= (peakCORR*BWScorr)/PEAK_CUTOFF)[0])) /
-                    float(totpix))
-        else:
-            visA = -1.
-        
-        print >> pos, '%8d' % nblobs,
-        print >> pos, '%10d' % npixels,
-        print >> pos, '%10d' % peak[1],
-        print >> pos, '%10d' % peak[0],
-        print >> pos, '%15.9f' % peakra,
-        print >> pos, '%15.9f' % peakdec,
-        #print >> pos, '%12s' % peakraHMS,  # fiddle here if you want RA in HMS
-        #print >> pos, '%14s' % peakdecDMS, # fiddle here if you want Dec in DMS
-        print >> pos, '%10.2e' % RAerr,
-        print >> pos, '%10.2e' % DECerr,
-        print >> pos, '%14.2f' % peakC[1],
-        print >> pos, '%14.2f' % peakC[0],
-        print >> pos, '%15.9f' % peakraC,
-        print >> pos, '%15.9f' % peakdecC,
-        print >> pos, '%10d' % ctFlag,
-        print >> pos, '%14.2f' % peakWC[1],
-        print >> pos, '%14.2f' % peakWC[0],
-        print >> pos, '%15.9f' % peakraWC,
-        print >> pos, '%15.9f' % peakdecWC,
-        print >> pos, '%10d' % wctFlag,
-        print >> pos, '%10d %10d %10d %10d' % blob_border(blob),
-        print >> pos, '%10.2e' % datarms[peak],
-        print >> pos, '%10.2e' % BWScorr,
-        print >> pos, '%8.2f' % Mval,
-        print >> pos, '%11.3e' % (dataimg[peak]/datarms[peak]),
-        print >> pos, '%11.3e' % (peakFIT/datarms[peak]),
-        print >> pos, '%11.3e' % Aval,
-        print >> pos, '%14.6e' % dataimg[peak],
-        print >> pos, '%14.6e' % peakFIT,
-        print >> pos, '%14.6e' % peakCORR,
-        print >> pos, '%14.6e' % peakCB,
-        print >> pos, '%14.6e' % peakCBBWS,
-        print >> pos, '%14.6e' % peakerr,
-        print >> pos, '%14.6e' % flux,
-        print >> pos, '%14.6e' % fluxCB,
-        print >> pos, '%14.6e' % fluxCORR,
-        print >> pos, '%14.6e' % fluxCBCORR,
-        print >> pos, '%14.6e' % fluxerr,
-        print >> pos, '%8.2f' % Rest,
-        print >> pos, '%11.3e' % visA
-        
-        (ra1, dec1) = pix2coords(border[0], border[2], refp, proj)
-        (ra2, dec2) = pix2coords(border[1], border[2], refp, proj)
-        (ra3, dec3) = pix2coords(border[1], border[3], refp, proj)
-        (ra4, dec4) = pix2coords(border[0], border[3], refp, proj)
-        
-        # Ain't nothing l33t about the annotation files...just make boxes
-        if options.ds9:
-            # ds9 pixels start from 1, not 0 like kvis
-            print >> annD, "polygon %d %d %d %d %d %d %d %d %d %d # text={%d}" \
-        % (border[0]+1, border[2]+1, border[1]+1, border[2]+1, \
-           border[1]+1, border[3]+1, border[0]+1, border[3]+1, \
-           border[0]+1, border[2]+1, nblobs)
-        
-        if options.kvis:
-            print >> annK, "TEXT %.9f %.9f %d" % (peakra, peakdec, nblobs)
-            print >> annK, "CLINES %f %f %f %f %f %f %f %f %f %f" \
-        % (ra1, dec1, ra2, dec2, ra3, dec3, ra4, dec4, ra1, dec1)
-        
-        for pixel in blob:
-            dataimg[pixel] = BLOBBED
-    
-    else:
-        print 'Blob has peak below SNR cutoff due to peak bias correction. Filtering.'
-        nfilt_size += 1
+	    #  only attempt to get fitted peak if the pixel in
+	    #+ question is the maximum within a 3x3 array
+	    fitarray = np.array(dataimg[peak[0]-1:peak[0]+2,peak[1]-1:peak[1]+2].reshape(9))
+	    if dataimg[peak] >= fitarray.max():
+	        # get fitted peak SB using 2D parabola to 3x3 array about peak
+	        peakFIT = parabfit(fitarray)
+	        
+	        #  if peakFIT is smaller than peak (which is possible for small values
+	        #+ of N; see Fig. A1 of the BLOBCAT manuscript), then for consistency, choose
+	        #+ to accept the observed peak as the fitted peak
+	        if dataimg[peak] > peakFIT:
+	            peakFIT = dataimg[peak]
+	    else:
+	        peakFIT = dataimg[peak]
+	    
+	    # blobs satisfying PEAK_DETECT may not satisfy PEAK_CUTOFF
+	    # filter on PEAK_CUTOFF using the fitted peak SB
+	    if peakFIT/datarms[peak] >= PEAK_CUTOFF:
+		
+		# area of source at lambda*sig below observed raw peak
+		pixcount = 0
+		for pixel in blob:
+		    if datasnr[pixel] >= datasnr[peak]-lamval:
+		        pixcount += 1
+		
+		# number of independent beams
+		Mval = pixcount / (sqrt(12)/4/log(2.) * refp['bmaj'] * refp['bmin'] / 
+		                   fabs(refp['cdelt1']*refp['cdelt2']) )
+		
+		# get peak bias corrected SNR
+		Aval = correctpeak(peakFIT/datarms[peak],Mval)
+		
+		# Aval may now be smaller than PEAK_CUTOFF
+		# filter on PEAK_CUTOFF again...
+		if Aval >= PEAK_CUTOFF:
+		    
+		    # print out results
+		    nblobs += 1
+		    print nblobs, '(', peak[1],',',peak[0], ') =', npixels, 'pixels'
+		    
+		    (peakra, peakdec) = pix2coords(peak[1], peak[0], refp, proj)
+		    #peakraHMS  = ra2hms(peakra)
+		    #peakdecDMS = dec2dms(peakdec)
+		    
+		    # get unweighted centroid position
+		    peakC = np.average(blob, axis=0)
+		    (peakraC, peakdecC) = pix2coords(peakC[1], peakC[0], refp, proj)
+		    # is unweighted centroid located in a flooded pixel?
+		    if (floor(peakC[0]),floor(peakC[1])) in blob:
+		        ctFlag = 1
+		    else:
+		        ctFlag = 0
+		    
+		    # get weighted centroid position
+		    wts = datasnr[np.array(blob)[:,0],np.array(blob)[:,1]]
+		    peakWC = np.average(blob, axis=0, weights=wts)
+		    (peakraWC, peakdecWC) = pix2coords(peakWC[1], peakWC[0], refp, proj)
+		    # is weighted centroid located in a flooded pixel?
+		    if (floor(peakWC[0]),floor(peakWC[1])) in blob:
+		        wctFlag = 1
+		    else:
+		        wctFlag = 0
+		    
+		    # get peak bias corrected peak SB
+		    peakCORR = Aval*datarms[peak]
+		    
+		    # calculate positional errors
+		    RAerr  = poserr(calRAerr,semerr,Aval,1,refp)
+		    DECerr = poserr(calDECerr,semerr,Aval,2,refp)
+		    
+		    # Bottom left going clockwise
+		    (ra1, dec1) = pix2coords(border[0], border[2], refp, proj)
+		    (ra2, dec2) = pix2coords(border[1], border[2], refp, proj)
+		    (ra3, dec3) = pix2coords(border[1], border[3], refp, proj)
+		    (ra4, dec4) = pix2coords(border[0], border[3], refp, proj)
+		    
+		    # clean bias correction
+		    peakCB = peakCORR + CBcorr
+		    fluxCB = flux + npixels * CBcorr
+		    
+		    # get flux density in Jy, not surface brightness in Jy/beam
+		    flux   = flux / beamconv
+		    fluxCB = fluxCB / beamconv
+		    
+		    # correct flux based on Gaussian morphology estimate of what
+		    #+ has been missed below the SNR flood cutoff
+		    fluxCORR   = getintf(FLOOR_CUTOFF,Aval,flux)
+		    fluxCBCORR = getintf(FLOOR_CUTOFF,peakCB/datarms[peak],fluxCB)
+		    
+		    # apply bandwidth smearing correction to peak SB
+		    BWScorr   = 1 / dataBWS[peak]
+		    peakCBBWS = peakCB * BWScorr
+		    
+		    # estimate measurement errors
+		    peakerr = sqrt((abserr*peakCBBWS)**2+(pixerr*peakCBBWS)**2+(BWScorr*datarms[peak])**2)
+		    fluxerr = sqrt((abserr*fluxCBCORR)**2+(datarms[peak])**2)
+		    
+		    # diagnostic
+		    Rest = blobarea(FLOOR_CUTOFF,peakCORR,datarms[peak],dataBWS[peak],npixels,refp)
+		    
+		    #  visibility area (observable source density), taking into account both
+		    #+ bandwidth smearing and image sensitivity
+		    if options.visArea:
+		        visA = (float(len(np.where(datarmsBS <= (peakCORR*BWScorr)/PEAK_CUTOFF)[0])) /
+		                float(totpix))
+		    else:
+		        visA = -1.
+		    
+		    print >> pos, '%8d' % nblobs,
+		    print >> pos, '%10d' % npixels,
+		    print >> pos, '%10d' % peak[1],
+		    print >> pos, '%10d' % peak[0],
+		    print >> pos, '%15.9f' % peakra,
+		    print >> pos, '%15.9f' % peakdec,
+		    #print >> pos, '%12s' % peakraHMS,	# fiddle here if you want RA in HMS
+		    #print >> pos, '%14s' % peakdecDMS,	# fiddle here if you want Dec in DMS
+		    print >> pos, '%10.2e' % RAerr,
+		    print >> pos, '%10.2e' % DECerr,
+		    print >> pos, '%14.2f' % peakC[1],
+		    print >> pos, '%14.2f' % peakC[0],
+		    print >> pos, '%15.9f' % peakraC,
+		    print >> pos, '%15.9f' % peakdecC,
+		    print >> pos, '%10d' % ctFlag,
+		    print >> pos, '%14.2f' % peakWC[1],
+		    print >> pos, '%14.2f' % peakWC[0],
+		    print >> pos, '%15.9f' % peakraWC,
+		    print >> pos, '%15.9f' % peakdecWC,
+		    print >> pos, '%10d' % wctFlag,
+		    print >> pos, '%10d %10d %10d %10d' % blob_border(blob),
+		    print >> pos, '%10.2e' % datarms[peak],
+		    print >> pos, '%10.2e' % BWScorr,
+		    print >> pos, '%8.2f' % Mval,
+		    print >> pos, '%11.3e' % (dataimg[peak]/datarms[peak]),
+		    print >> pos, '%11.3e' % (peakFIT/datarms[peak]),
+		    print >> pos, '%11.3e' % Aval,
+		    print >> pos, '%14.6e' % dataimg[peak],
+		    print >> pos, '%14.6e' % peakFIT,
+		    print >> pos, '%14.6e' % peakCORR,
+		    print >> pos, '%14.6e' % peakCB,
+		    print >> pos, '%14.6e' % peakCBBWS,
+		    print >> pos, '%14.6e' % peakerr,
+		    print >> pos, '%14.6e' % flux,
+		    print >> pos, '%14.6e' % fluxCB,
+		    print >> pos, '%14.6e' % fluxCORR,
+		    print >> pos, '%14.6e' % fluxCBCORR,
+		    print >> pos, '%14.6e' % fluxerr,
+		    print >> pos, '%8.2f' % Rest,
+		    print >> pos, '%11.3e' % visA
+		    
+		    (ra1, dec1) = pix2coords(border[0], border[2], refp, proj)
+		    (ra2, dec2) = pix2coords(border[1], border[2], refp, proj)
+		    (ra3, dec3) = pix2coords(border[1], border[3], refp, proj)
+		    (ra4, dec4) = pix2coords(border[0], border[3], refp, proj)
+		    
+		    # Ain't nothing l33t about the annotation files...just make boxes
+		    if options.ds9:
+		        # ds9 pixels start from 1, not 0 like kvis
+		        print >> annD, "polygon %d %d %d %d %d %d %d %d %d %d # text={%d}" \
+				% (border[0]+1, border[2]+1, border[1]+1, border[2]+1, \
+				   border[1]+1, border[3]+1, border[0]+1, border[3]+1, \
+				   border[0]+1, border[2]+1, nblobs)
+		    
+		    if options.kvis:
+		        print >> annK, "TEXT %.9f %.9f %d" % (peakra, peakdec, nblobs)
+		        print >> annK, "CLINES %f %f %f %f %f %f %f %f %f %f" \
+				% (ra1, dec1, ra2, dec2, ra3, dec3, ra4, dec4, ra1, dec1)
+		    
+		    for pixel in blob:
+		        dataimg[pixel] = BLOBBED
+		
+		else:
+		    print 'Blob has peak below SNR cutoff due to peak bias correction. Filtering.'
+		    nfilt_size += 1
             
-      # No need to accumulate filtering statistic for this loop.
-  
-  elif datasnr[peak] > PEAK_CUTOFF:
-      #  only print those with SNR greater than PEAK_CUTOFF
-      #+ so that pixellation rejections are not counted.
-      print 'Flooded blob dimensions too small. Filtering.'
-      nfilt_size += 1
+	    # No need to accumulate filtering statistic for this loop.
+	
+	elif datasnr[peak] > PEAK_CUTOFF:
+	    #  only print those with SNR greater than PEAK_CUTOFF
+	    #+ so that pixellation rejections are not counted.
+	    print 'Flooded blob dimensions too small. Filtering.'
+	    nfilt_size += 1
     
     elif npixels > MAX_PIX and datasnr[peak] > PEAK_CUTOFF:
-  #  only print those with SNR greater than PEAK_CUTOFF
-  #+ so that pixellation rejections are not counted.
+	#  only print those with SNR greater than PEAK_CUTOFF
+	#+ so that pixellation rejections are not counted.
         print 'Flooded blob npixels above max range. Filtering.'
         nfilt_size += 1
     
     elif 0 < npixels < MIN_PIX and datasnr[peak] > PEAK_CUTOFF:
         #  blobs with zero pixels should not be counted, nor
-  #+ should those with SNR greater than PEAK_CUTOFF
-  #+ so that pixellation rejections are not counted.
+	#+ should those with SNR greater than PEAK_CUTOFF
+	#+ so that pixellation rejections are not counted.
         print 'Flooded blob npixels below min range. Filtering.'
         nfilt_size += 1
 
@@ -1283,12 +1283,12 @@ if options.plot:
     hdu = pyfits.open(FILENAME)[0]
     # check if pltRng has been specified on command line and act accordingly
     if pltRng:
-  fig=aplpy.FITSFigure(hdu)
-  fig.show_grayscale(vmin=pltRng[0], vmax=pltRng[1], interpolation='nearest')
+	fig=aplpy.FITSFigure(hdu)
+	fig.show_grayscale(vmin=pltRng[0], vmax=pltRng[1], interpolation='nearest')
     else:
-      # figure out the range automagically
-  fig=aplpy.FITSFigure(hdu)
-  fig.show_grayscale(interpolation='nearest')
+    	# figure out the range automagically
+	fig=aplpy.FITSFigure(hdu)
+	fig.show_grayscale(interpolation='nearest')
     # replace data in input fits file with floodfilled data and make a contour plot
     hdu.data=dataimg
     fig.show_contour(hdu, levels=[0.999*BLOBBED], colors='red')
