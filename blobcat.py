@@ -222,7 +222,7 @@ def read_data(filename):
     hdulist.info()
     data = hdulist[0].data
     header = hdulist[0].header
-    keys = header.ascard.keys()
+    keys = header.keys()
     refp = {}
     for key in keys:
         refp[key.lower()] = header[key]
