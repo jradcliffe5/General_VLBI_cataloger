@@ -12,7 +12,7 @@ import pandas as pd
 from matplotlib import gridspec
 
 rc('font', **{'family':'serif','serif':['Computer Modern']})
-rc('text', usetex=True)
+rc('text', usetex=False)
 rcParams['mathtext.default'] = 'regular'
 figsize = plt.rcParams["figure.figsize"]
 figsize[1]=9
@@ -108,5 +108,5 @@ ticks = np.append(ticks,v[1])
 print(ticks)
 cb.set_ticks(ticks)
 cax.xaxis.set_ticks_position('top')
-cax.set_xlabel('rms sensitivity ($\mathrm{\mu Jy\,beam^{-1}}$)',labelpad=-75)
+cax.set_xlabel('rms sensitivity (uJy/beam)',labelpad=-75)
 fig.savefig('rms_pbcor.png',bbox_inches='tight',dpi=fig.dpi,format="png")
